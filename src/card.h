@@ -8,6 +8,7 @@ typedef char byte;
 
 typedef struct { 
 	unsigned long int id, creation, conclusion, due;
-	byte priority, column;
+	short int priority;
+	byte column;
 	fpos_t author, text; // use fgetpos/fsetpos for security reasons
 } card;
