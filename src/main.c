@@ -25,6 +25,8 @@ long int getAuthor(void);
 
 void putError(int err);
 
+void quit(void);
+
 int main(int argc, char* argv[]){
 	initialize();
 	int opt;
@@ -54,6 +56,9 @@ int main(int argc, char* argv[]){
 				break;
 			case 8:
 				err = viewByCreation();
+				break;
+			case 9:
+				quit();
 				break;
 			default:
 				(err)? : putError(err);
