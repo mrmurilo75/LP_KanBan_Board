@@ -39,10 +39,13 @@ void putError(int err);		// print error message to stderr
 
 void quit(void);		// save state and quit
 
+List_node ToDo;
+List_node Doing;
+
 int main(int argc, char* argv[]){
 	initialize();
 	int opt;
-	while(opt=get_option()){
+	while(opt=get_option()){	//opt == 0 to quit
 		switch(opt){
 				int err=0;
 			case 1:
@@ -69,13 +72,12 @@ int main(int argc, char* argv[]){
 			case 8:
 				err = viewByCreation();
 				break;
-			case 9:
-				quit();
-				break;
 			default:
 				(err)? : putError(err);
 		}
-
+	}
+	err = quit();
+	return err;
 }
 
 
@@ -85,10 +87,25 @@ void intialize(){
 }
 
 int get_option(void){
-	//podemos implementar primeiramente um option por opcoes (1, 2, 3...)
-	//e depois se tivermos tempo por comandos ("insert", "doing", "done"...)
-	
-	//implement input protection
+	int opt=0;
+	printf("**************MENU**************\n");
+	printf("1-Inserir tarefa em 'To Do'\n");
+	printf("2-Mover cartão de 'To Do' para 'Doing'\n");
+	printf("3-Alterar pessoas responsável\n");
+	printf("4-Fechar tarefa\n");
+	printf("5-Reabrir tarefa\n");
+	printf("6-Visualizar o quadro\n");
+	printf("7-Visualizar tarefas de uma pessoa\n");
+	printf("8-Visualizar tarefas por ordem de criação\n");
+	printf("9-Sair\n");
+	printf("********************************\n");
+	printf("Insira a opção pretendida.\n");
+	scanf("%d",&opt);
+	if(opt>=1 && opt<=9)
+		return opt;
+	else
+		printf("Tem que escolher uma opção válida.\n");
 	return 0;
 }
+
 
