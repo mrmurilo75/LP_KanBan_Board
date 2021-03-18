@@ -4,8 +4,7 @@
 
 void initialize(void);
 
-
-int get_option(void);
+int get_option(void); 		// get input option from user (1. insert,  2. open task...)
 
 int putTask(card *newTask); 	// get new task and make card in TODO column
 
@@ -45,7 +44,8 @@ List_node Doing;
 
 int main(int argc, char* argv[]){
 	initialize();
-	int opt=get_option();
+	int opt;
+	while(opt=get_option()){	//opt == 0 to quit
 		switch(opt){
 				int err=0;
 			case 1:
@@ -72,12 +72,12 @@ int main(int argc, char* argv[]){
 			case 8:
 				err = viewByCreation();
 				break;
-			case 9:
-				quit();
-				break;
 			default:
 				(err)? : putError(err);
 		}
+	}
+	err = quit();
+	return err;
 }
 
 
