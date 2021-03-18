@@ -4,6 +4,7 @@
 
 void initialize(void);
 
+
 int get_option(void);
 
 int putTask(card *newTask); 	// get new task and make card in TODO column

@@ -4,6 +4,7 @@
 #define DOING 2
 #define DONE 3
 
+
 typedef char byte;
 
 typedef struct {

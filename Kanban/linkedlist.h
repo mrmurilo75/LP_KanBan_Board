@@ -6,6 +6,7 @@ typedef struct lnode{
 	List next;
 }List_node;
 
+
 int empty_list(List list){
 	return(list->next == NULL ? 1:0);
 }
