@@ -4,28 +4,40 @@
 
 void initialize(void);
 
-int get_option(void);
+int get_option(void); 		// get input option from user (1. insert,  2. open task...)
 
-int putTask(card *newTask);
-card* getInsertion();
+int putTask(card *newTask); 	// get new task and make card in TODO column
 
-card* getCard(void);
+card* getInsertion();		// get text for description, priority and due date
+				// get creation date using time.h
 
-int openTask(card *reference);
-int closeTask(card *reference);
-int reopenTask(card *reference);
+card* getCard(void);		// get card reference from id (text position in file)
 
-int changeAuthor(card *reference);
+int openTask(card *reference);		// move task from TODO to DOING
+					// get and set author, get and set due date
 
-int fullView(void);
-int viewByCreation(void);
-int viewByAuthor(long int author);
+int closeTask(card *reference);		// move task from DOING to DONE
+					// set conclusion date with time.h
 
-long int getAuthor(void);
+int reopenTask(card *reference);	// move task from DONE to TODO
+					// get and reset priority
 
-void putError(int err);
+int changeAuthor(card *reference);	// change Author
 
-void quit(void);
+int fullView(void);			// view from the organized linked list (
+					//					TODO by priority then creation,
+					//					DOING by author,
+					//					DONE by conclusion )
+
+int viewByCreation(void);		// view all by creation date
+
+int viewByAuthor(long int author);	// view all by Author (only DOING and DONE)
+
+long int getAuthor(void);		// read Author from input
+
+void putError(int err);		// print error message to stderr
+
+void quit(void);		// save state and quit
 
 int main(int argc, char* argv[]){
 	initialize();
