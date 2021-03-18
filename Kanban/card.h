@@ -4,7 +4,6 @@
 #define DOING 2
 #define DONE 3
 
-
 typedef char byte;
 
 typedef struct {
@@ -13,5 +12,5 @@ typedef struct {
 	short int priority;
 	byte column;
 
-	//fpos_t text, author; //for use with fgetpos/fsetpos if necessary
+	//fpos_t text, author; //for use with fgetpos/fsetpos if necessary 
 } card;
