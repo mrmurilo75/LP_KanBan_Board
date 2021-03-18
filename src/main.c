@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "card.h"
+#include "linkedlist.h"
 
-void initialize(void);
+void initialize(void);		// get .txt files from disk into memory and fill pointers
 
 int get_option(void); 		// get input option from user (1. insert,  2. open task...)
 
@@ -82,30 +83,38 @@ int main(int argc, char* argv[]){
 
 
 void intialize(){
-	//fill array with card structures
 	return;
 }
 
 int get_option(void){
-	int opt=0;
-	printf("**************MENU**************\n");
-	printf("1-Inserir tarefa em 'To Do'\n");
-	printf("2-Mover cartão de 'To Do' para 'Doing'\n");
-	printf("3-Alterar pessoas responsável\n");
-	printf("4-Fechar tarefa\n");
-	printf("5-Reabrir tarefa\n");
-	printf("6-Visualizar o quadro\n");
-	printf("7-Visualizar tarefas de uma pessoa\n");
-	printf("8-Visualizar tarefas por ordem de criação\n");
-	printf("9-Sair\n");
-	printf("********************************\n");
-	printf("Insira a opção pretendida.\n");
-	scanf("%d",&opt);
-	if(opt>=1 && opt<=9)
-		return opt;
-	else
-		printf("Tem que escolher uma opção válida.\n");
-	return 0;
+	int opt=9;
+	while(opt){
+		if(opt==9){
+			printf("**************MENU**************\n
+				1 - Inserir tarefa em 'To Do'\n
+				2 - Mover cartão de 'To Do' para 'Doing'\n
+				3 - Alterar pessoas responsável\n
+				4 - Fechar tarefa\n
+				5 - Reabrir tarefa\n
+				6 - Visualizar o quadro\n
+				7 - Visualizar tarefas de uma pessoa\n
+				8 - Visualizar tarefas por ordem de criação\n
+				0 - Sair\n
+				********************************\n
+				Insira a opção pretendida: ");
+		}
+		
+		scanf("%d",&opt);
+		if(!ferror(stdin) && opt>=0 && opt<=8){
+			return opt;
+		} else {
+			printf("Tem que escolher uma opção válida!\n
+				9-Para ver menu novamente");
+			opt=10;
+		}
+
+	}
+	return -1;
 }
 
 
