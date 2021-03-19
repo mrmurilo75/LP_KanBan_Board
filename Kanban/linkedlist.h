@@ -1,8 +1,12 @@
 #include <stdlib.h>
 
+#ifndef LINKEDLIST_H_INCLUDED
+#define LINKEDLIST_H_INCLUDED
+#define VALUE_TYPE void*
+
 typedef struct lnode* List;
 typedef struct lnode {
-	int info;
+	VALUE_TYPE value;
 	List next;
 } List_node;
 
@@ -16,3 +20,4 @@ void insere_lista(List lista, int it);
 List pesquisa_lista(List lista, int it);
 void imprime_lista(List lista);
 
+#endif //LINKEDLIST_H_INCLUDED
