@@ -32,6 +32,6 @@ typedef struct card_node{
         
 
 
-card* fnewCard(FILE* stream);	// malloc space for a card and fill from stream
+card* freadCard(FILE* stream);	// malloc space for a card and fill from stream
 
 #endif	//CARD_H_INCLUDED

@@ -1,52 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include "main.h"
 #include "card.c"
-
-#define TODO 1
-#define DOING 2
-#define DONE 3
-
-#define BYALL 1
-#define BYAUTHOR 2
-#define BYCREATION 3
-
-int initialize(void);		// get .txt files from disk into memory and fill pointers
-
-int get_option(void); 		// get input option from user (1. insert,  2. open task...)
-
-int putTask(card *newTask); 	// get new task and make card in TODO column
-
-card* getInsertion();		// get text for description, priority and due date
-				// get creation date using time.h
-
-card* getCard(void);		// get card reference from id (text position in file)
-
-int openTask(card *reference);		// move task from TODO to DOING
-					// get and set author, get and set due date
-
-int closeTask(card *reference);		// move task from DOING to DONE
-					// set conclusion date with time.h
-
-int reopenTask(card *reference);	// move task from DONE to TODO
-					// get and reset priority
-
-int changeAuthor(card *reference);	// change Author
-
-int fullView(void);			// view from the organized linked list (
-					//					TODO by priority then creation,
-					//					DOING by author,
-					//					DONE by conclusion )
-
-int viewByCreation(void);		// view all by creation date
-
-int viewByAuthor(long int author);	// view all by Author (only DOING and DONE)
-
-long int getAuthor(void);		// read Author from input
-
-int putError(int err);		// print error message to stderr
-
-int quit(void);		// save state and quit
-
 
 int main(int argc, char* argv[]){
 	int err=initialize(), opt;
@@ -88,14 +41,9 @@ int main(int argc, char* argv[]){
 	return 0;
 }
 
-int numberOfCards=0;
-
 CardList byAll;
 CardList byAuthor;
 CardList byCreation;
-
-void createCleanLists(void);
-int putInListing(card* next);
 
 int initialize(void){
 		// get .txt files from disk into memory and fill pointers
@@ -106,7 +54,7 @@ int initialize(void){
 		return 0;
 	}
 	createCleanLists();
-	for(card* next=fnewCard(fcards); next!=NULL; next=fnewCard(fcards))
+	for(card* next=freadCard(fcards); next!=NULL; next=freadCard(fcards))
 		if( (err = putInListing(next)) ) {
 			putError(err);
 			return err;
@@ -125,9 +73,6 @@ void createCleanLists(){
 	byCreation->value = NULL;
 }
 
-int putByAll(cardNode* input, cardNode* now, cardNode* prev);
-int putByAuthor(cardNode* input, cardNode* now, cardNode* prev);
-int putByCreation(cardNode* input, cardNode* now, cardNode* prev);
 /*
  * possible better way of implementing:
  * 	when going thru byAll check the other in the now and see if we would be bellow, if so, save cardNode* variable so when going byAuthor and byCreation we dont have to start at the beggining 
@@ -152,15 +97,11 @@ int putInListing(card* next){
 
 int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next);
 
-cardNode* byAllLastToDo = NULL;
-
 int putByAll(cardNode* input, cardNode* now, cardNode* prev){
 	if( now->value == NULL)		// list is empty or we've reached the end
 		return putIn(BYALL, input, prev, now);
 
 	if(input->value->column < now->value->column){		// when ordering by all follow TODO -> DOING -> DONE
-		if(now->value->column == DOING)
-			byAllLastToDo = input;
 		return putIn(BYALL, input, prev, now);
 	}
 
@@ -171,11 +112,6 @@ int putByAll(cardNode* input, cardNode* now, cardNode* prev){
 	}
 
 	if(input->value->column == DOING){
-/*
-		if(now->nextByAuthor == NULL && byAllLastToDo != NULL)
-			return putByAll(input, byAuthor, byAllLastToDo);	// the byAuthor list first element coincides with the first DOING element in byAll
-* doesnt work bc we are putting everything in all lists in parallel (would work if we filled byAll first)
-*/
 		if(input->value->author <= now->value->author)
 			return putIn(BYALL, input, prev, now);
 		return putByAll(input, now->nextByAll, now);
