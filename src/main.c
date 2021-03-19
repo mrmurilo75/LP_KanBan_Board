@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "card.c"
-#include "linkedlist.c"
-#include "SortedList.c"
 
 #define TODO 1
 #define DOING 2
@@ -10,7 +8,7 @@
 
 #define BYALL 1
 #define BYAUTHOR 2
-#define BYCREATOR 3
+#define BYCREATION 3
 
 int initialize(void);		// get .txt files from disk into memory and fill pointers
 
@@ -108,7 +106,7 @@ int initialize(void){
 		return 0;
 	}
 	createCleanLists();
-	for(card* next=fnewCard(fcards); fnewCards!=NULL; next=fnewCard(fcards))
+	for(card* next=fnewCard(fcards); next!=NULL; next=fnewCard(fcards))
 		if( (err = putInListing(next)) ) {
 			putError(err);
 			return err;
@@ -202,7 +200,7 @@ int putByAuthor(cardNode* input, cardNode* now, cardNode* prev){
 	if(input->value->author <= now->value->author)
 		return putIn(BYAUTHOR, input, prev, now);
 	return putByAll(input, now->nextByAuthor, now);
-	
+
 	return -1;
 }
 
@@ -213,7 +211,7 @@ int putByCreation(cardNode* input, cardNode* now, cardNode* prev){
 	if(input->value->creation <= now->value->creation)
 		return putIn(BYCREATION, input, prev, now);
 	return putByAll(input, now->nextByCreation, now);
-	
+
 	return -1;
 }
 
@@ -221,13 +219,13 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next){
 	if(prev == NULL)		// now is the first node
 		switch(list){
 			case BYALL: 
-				byAll = input;
+				byAll = now;
 				break;
 			case BYAUTHOR:
-				byAuthor = input;
+				byAuthor = now;
 				break;
-			case BYCREATOR: 
-				byCreation = input;
+			case BYCREATION: 
+				byCreation = now;
 				break;
 			default:
 				return -1;
@@ -235,13 +233,13 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next){
 	else
 		switch(list){
 			case BYALL: 
-				prev->nextByAll = input;
+				prev->nextByAll = now;
 				break;
 			case BYAUTHOR:
-				prev->nextByAuthor = input;
+				prev->nextByAuthor = now;
 				break;
-			case BYCREATOR: 
-				prev->nextByCreation = input;
+			case BYCREATION: 
+				prev->nextByCreation = now;
 				break;
 			default:
 				return -1;
@@ -249,13 +247,13 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next){
 	if(now != NULL)
 		switch(list){
 			case BYALL: 
-				input->nextByAll = now;
+				now->nextByAll = next;
 				break;
 			case BYAUTHOR:
-				input->nextByAuthor = now;
+				now->nextByAuthor = next;
 				break;
-			case BYCREATOR: 
-				input->nextByCreation = now;
+			case BYCREATION: 
+				now->nextByCreation = next;
 				break;
 			default:
 				return -1;
@@ -283,7 +281,7 @@ int get_option(void){
 				********************************\
 				Insira a opção pretendida: ");
 		}
-		
+
 		scanf("%d",&opt);
 		if(!ferror(stdin) && opt>=0 && opt<=8){
 			return opt;
