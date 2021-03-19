@@ -2,10 +2,11 @@
 
 #ifndef LINKEDLIST_H_INCLUDED
 #define LINKEDLIST_H_INCLUDED
+#define VALUE_TYPE void*
 
 typedef struct lnode* List;
 typedef struct lnode {
-	int info;
+	VALUE_TYPE value;
 	List next;
 } List_node;
 
