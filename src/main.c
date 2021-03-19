@@ -129,7 +129,12 @@ void createCleanLists(){
 
 int putByAll(cardNode* input, cardNode* now, cardNode* prev);
 int putByAuthor(cardNode* input, cardNode* now, cardNode* prev);
-int putByCreator(cardNode* input, cardNode* now, cardNode* prev);
+int putByCreation(cardNode* input, cardNode* now, cardNode* prev);
+/*
+ * possible better way of implementing:
+ * 	when going thru byAll check the other in the now and see if we would be bellow, if so, save cardNode* variable so when going byAuthor and byCreation we dont have to start at the beggining 
+ * 		also if cardNode* saved != NULL se if its further or closer to where our position shoulb be to see if it is advantageous to overwrite
+ */
 
 int putInListing(card* next){
 	cardNode* input = (cardNode*) malloc(sizeof(cardNode));
@@ -140,7 +145,7 @@ int putInListing(card* next){
 		return err;
 	if( (err = putByAuthor(input, byAuthor, NULL)) )
 		return err;
-	if( (err = putByCreator(input, byCreator, NULL)) )
+	if( (err = putByCreation(input, byCreation, NULL)) )
 		return err;
 
 	return err;
@@ -152,7 +157,7 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next);
 cardNode* byAllLastToDo = NULL;
 
 int putByAll(cardNode* input, cardNode* now, cardNode* prev){
-	if(now->value == NULL)		// list is empty or we've reached the end
+	if( now->value == NULL)		// list is empty or we've reached the end
 		return putIn(BYALL, input, prev, now);
 
 	if(input->value->column < now->value->column){		// when ordering by all follow TODO -> DOING -> DONE
@@ -191,13 +196,24 @@ int putByAll(cardNode* input, cardNode* now, cardNode* prev){
 int putByAuthor(cardNode* input, cardNode* now, cardNode* prev){
 	if(input->value->column == TODO)
 		return 0;			// TODO's don't have author assigned
+	if(now->value == NULL)		// list is empty or we've reached the end
+		return putIn(BYAUTHOR, input, prev, now);
+
+	if(input->value->author <= now->value->author)
+		return putIn(BYAUTHOR, input, prev, now);
+	return putByAll(input, now->nextByAuthor, now);
 	
 	return -1;
 }
 
-int putByCreator(cardNode* input, cardNode* now, cardNode* prev){
-	// IMPLEMENT 
-	// similar to putByAll
+int putByCreation(cardNode* input, cardNode* now, cardNode* prev){
+	if(now->value == NULL)		// list is empty or we've reached the end
+		return putIn(BYCREATION, input, prev, now);
+
+	if(input->value->creation <= now->value->creation)
+		return putIn(BYCREATION, input, prev, now);
+	return putByAll(input, now->nextByCreation, now);
+	
 	return -1;
 }
 
@@ -211,7 +227,7 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next){
 				byAuthor = input;
 				break;
 			case BYCREATOR: 
-				byCreator = input;
+				byCreation = input;
 				break;
 			default:
 				return -1;
@@ -225,7 +241,7 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next){
 				prev->nextByAuthor = input;
 				break;
 			case BYCREATOR: 
-				prev->nextByCreator = input;
+				prev->nextByCreation = input;
 				break;
 			default:
 				return -1;
@@ -239,11 +255,13 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next){
 				input->nextByAuthor = now;
 				break;
 			case BYCREATOR: 
-				input->nextByCreator = now;
+				input->nextByCreation = now;
 				break;
 			default:
 				return -1;
 		}
+	else
+		return -1;
 
 	return 0;
 }
