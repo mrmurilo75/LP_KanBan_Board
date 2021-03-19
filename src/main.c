@@ -168,9 +168,12 @@ int putByAll(cardNode* input, cardNode* now, cardNode* prev){
 	}
 
 	if(input->value->column == DOING){
-		if(now->nextByAuthor == NULL && byAllPrevByAuthor != NULL)
+/*
+		if(now->nextByAuthor == NULL && byAllLastToDo != NULL)
 			return putByAll(input, byAuthor, byAllLastToDo);	// the byAuthor list first element coincides with the first DOING element in byAll
-		if(input->value->author >= now->value->author)
+* doesnt work bc we are putting everything in all lists in parallel (would work if we filled byAll first)
+*/
+		if(input->value->author <= now->value->author)
 			return putIn(BYALL, input, prev, now);
 		return putByAll(input, now->nextByAll, now);
 	}
@@ -186,8 +189,9 @@ int putByAll(cardNode* input, cardNode* now, cardNode* prev){
 }
 
 int putByAuthor(cardNode* input, cardNode* now, cardNode* prev){
-	// IMPLEMENT 
-	// similar to putByAll
+	if(input->value->column == TODO)
+		return 0;			// TODO's don't have author assigned
+	
 	return -1;
 }
 
