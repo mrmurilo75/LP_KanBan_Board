@@ -1,9 +1,11 @@
 #include "card.h"
 
-int fnewCard(FILE * stream){
-	if(stream == NULL)
-		return -1;
+card* freadCard(FILE * stream){
+	if(stream != NULL){
+		card *Card = (card *) malloc(sizeof(card));
+		if(fread(Card, sizeof(card), 1, stream) == 1)
+			return Card;
+	}
 
-	card *newCard = (card *) malloc(sizeof(card));
-	return (fread(newCard, sizeof(card), 1, stream) - 1);
+	return NULL;
 }

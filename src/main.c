@@ -54,7 +54,7 @@ int initialize(void){
 		return 0;
 	}
 	createCleanLists();
-	for(card* next=fnewCard(fcards); next!=NULL; next=fnewCard(fcards))
+	for(card* next=freadCard(fcards); next!=NULL; next=freadCard(fcards))
 		if( (err = putInListing(next)) ) {
 			putError(err);
 			return err;
