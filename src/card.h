@@ -21,6 +21,16 @@ typedef struct {
 	//fpos_t text, author; //for use with fgetpos/fsetpos if necessary 
 } card;
 
+struct cardNode{
+        card* value;
+        CardNode* nextByAll;
+        CardNode* nextByAuthor;
+        CardNode* nextByCreation;
+}
+        
+typedef cardNode* CardList;
+
+
 card* fnewCard(FILE* stream);	// malloc space for a card and fill from stream
 
 #endif	//CARD_H_INCLUDED
