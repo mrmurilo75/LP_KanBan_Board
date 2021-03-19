@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "card.h"
-#include "linkedlist.h"
+#include "linkedlist.c"
 
-void initialize(void);		// get .txt files from disk into memory and fill pointers
+int initialize(void);		// get .txt files from disk into memory and fill pointers
 
 int get_option(void); 		// get input option from user (1. insert,  2. open task...)
 
@@ -36,19 +36,18 @@ int viewByAuthor(long int author);	// view all by Author (only DOING and DONE)
 
 long int getAuthor(void);		// read Author from input
 
-void putError(int err);		// print error message to stderr
+int putError(int err);		// print error message to stderr
 
-void quit(void);		// save state and quit
+int quit(void);		// save state and quit
 
-List_node ToDo;
-List_node Doing;
 
 int main(int argc, char* argv[]){
-	initialize();
-	int opt;
-	while(opt=get_option()){	//opt == 0 to quit
+	int err=initialize(), opt;
+	while( (opt=get_option()) && !err){	//opt == 0 to quit
 		switch(opt){
-				int err=0;
+			case 0:
+				err = quit();
+				break;
 			case 1:
 				err = putTask(getInsertion());
 				break;
@@ -74,33 +73,35 @@ int main(int argc, char* argv[]){
 				err = viewByCreation();
 				break;
 			default:
-				(err)? : putError(err);
+				(err)? putError(err) : 0;
 		}
 	}
-	err = quit();
-	return err;
+	if(err)
+		return putError(err);
+	return 0;
 }
 
 
-void intialize(){
-	return;
+int initialize(void){
+		// get .txt files from disk into memory and fill pointers
+	return	0;
 }
 
 int get_option(void){
 	int opt=9;
 	while(opt){
 		if(opt==9){
-			printf("**************MENU**************\n
-				1 - Inserir tarefa em 'To Do'\n
-				2 - Mover cartão de 'To Do' para 'Doing'\n
-				3 - Alterar pessoas responsável\n
-				4 - Fechar tarefa\n
-				5 - Reabrir tarefa\n
-				6 - Visualizar o quadro\n
-				7 - Visualizar tarefas de uma pessoa\n
-				8 - Visualizar tarefas por ordem de criação\n
-				0 - Sair\n
-				********************************\n
+			printf("**************MENU**************\
+				1 - Inserir tarefa em 'To Do'\
+				2 - Mover cartão de 'To Do' para 'Doing'\
+				3 - Alterar pessoas responsável\
+				4 - Fechar tarefa\
+				5 - Reabrir tarefa\
+				6 - Visualizar o quadro\
+				7 - Visualizar tarefas de uma pessoa\
+				8 - Visualizar tarefas por ordem de criação\
+				0 - Sair\
+				********************************\
 				Insira a opção pretendida: ");
 		}
 		
@@ -108,7 +109,7 @@ int get_option(void){
 		if(!ferror(stdin) && opt>=0 && opt<=8){
 			return opt;
 		} else {
-			printf("Tem que escolher uma opção válida!\n
+			printf("Tem que escolher uma opção válida!\
 				9-Para ver menu novamente");
 			opt=10;
 		}
@@ -116,5 +117,3 @@ int get_option(void){
 	}
 	return -1;
 }
-
-
