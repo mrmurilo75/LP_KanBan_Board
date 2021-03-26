@@ -94,9 +94,6 @@ int putInListing(card* next){
 	return err;
 }
 
-
-int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next);
-
 int putByAll(cardNode* input, cardNode* now, cardNode* prev){
 	if( now->value == NULL)		// list is empty or we've reached the end
 		return putIn(BYALL, input, prev, now);
@@ -230,3 +227,5 @@ int get_option(void){
 	}
 	return -1;
 }
+
+

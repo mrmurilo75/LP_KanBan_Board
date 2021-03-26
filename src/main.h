@@ -14,8 +14,10 @@
 #define MAIN_HEADER_INCLUDED
 
 int initialize(void);			// get .txt files from disk into memory and fill pointers
+//DONE
 
 int get_option(void); 			// get input option from user (1. insert,  2. open task...)
+//DONE
 
 int putTask(card *newTask); 		// get new task and make card in TODO column
 
@@ -51,15 +53,21 @@ int putError(int err);			// print error message to stderr
 int quit(void);				// save state and quit
 
 void createCleanLists(void);		//create clean list for byAll, byAuthor, byCreator linked lists
+//DONE
 
 int putInListing(card* next);		// put card in all list in corret sorted position
+//DONE
 
 int putByAll(cardNode* input, cardNode* now, cardNode* prev);
-					// puts cards in byAll list
+//DONE					// puts cards in byAll list
+
 int putByAuthor(cardNode* input, cardNode* now, cardNode* prev);
-					// puts cards in byAuthor list
+//DONE					// puts cards in byAuthor list
 
 int putByCreation(cardNode* input, cardNode* now, cardNode* prev);
-					// puts cards in byCreation list
+//DONE					// puts cards in byCreation list
+
+int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next);
+//DONE					// effectively puts the given card 'now' between 'prev' and 'next'
 
 #endif // MAIN_HEADER_INCLUDED
