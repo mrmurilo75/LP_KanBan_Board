@@ -14,6 +14,25 @@
 #define MAIN_HEADER_INCLUDED
 
 int initialize(void);			// get .txt files from disk into memory and fill pointers
+//Auxiliar functions:
+	void createCleanLists(void);		//create clean list for byAll, byAuthor, byCreator linked lists
+	//DONE
+
+	int putInListing(card* next);		// put card in all list in corret sorted position
+	//DONE
+
+	int putByAll(cardNode* input, cardNode* now, cardNode* prev);
+	//DONE					// puts cards in byAll list
+
+	int putByAuthor(cardNode* input, cardNode* now, cardNode* prev);
+	//DONE					// puts cards in byAuthor list
+
+	int putByCreation(cardNode* input, cardNode* now, cardNode* prev);
+	//DONE					// puts cards in byCreation list
+
+	int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next);
+	//DONE					// effectively puts the given card 'now' between 'prev' and 'next'
+//
 //DONE
 
 int get_option(void); 			// get input option from user (1. insert,  2. open task...)
@@ -23,6 +42,7 @@ int putTask(card *newTask); 		// get new task and make card in TODO column
 
 card* getInsertion();			// get text for description, priority and due date
 					// get creation date using time.h
+	int 
 
 card* getCard(void);			// get card reference from id (text position in file)
 
@@ -51,23 +71,5 @@ long int getAuthor(void);		// read Author from input
 int putError(int err);			// print error message to stderr
 
 int quit(void);				// save state and quit
-
-void createCleanLists(void);		//create clean list for byAll, byAuthor, byCreator linked lists
-//DONE
-
-int putInListing(card* next);		// put card in all list in corret sorted position
-//DONE
-
-int putByAll(cardNode* input, cardNode* now, cardNode* prev);
-//DONE					// puts cards in byAll list
-
-int putByAuthor(cardNode* input, cardNode* now, cardNode* prev);
-//DONE					// puts cards in byAuthor list
-
-int putByCreation(cardNode* input, cardNode* now, cardNode* prev);
-//DONE					// puts cards in byCreation list
-
-int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next);
-//DONE					// effectively puts the given card 'now' between 'prev' and 'next'
 
 #endif // MAIN_HEADER_INCLUDED
