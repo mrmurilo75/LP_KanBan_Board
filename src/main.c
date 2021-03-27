@@ -229,3 +229,17 @@ int get_option(void){
 }
 
 
+card* getInsertion(){
+			// get text for text (description), priority and due date
+			// get creation date using time.h
+
+	card newCard();
+	newCard->column = TODO;
+	newCard->text = getText();
+	newCard->priority = getPriority();
+	newCard->creation = getCreation();
+
+}
+
+
+
