@@ -41,19 +41,27 @@ int main(int argc, char* argv[]){
 	return 0;
 }
 
-CardList byAll;
-CardList byAuthor;
-CardList byCreation;
+FILE* fcards = NULL;
+FILE* ftext = NULL;
+FILE* fauthor = NULL;
+
+CardList byAll = NULL;
+CardList byAuthor = NULL;
+CardList byCreation = NULL;
 
 int initialize(void){
 		// get .txt files from disk into memory and fill pointers
+	if(fcards == NULL) FILE *fcards = fopen("cards.bin", "r+b");
+	if(fcards == NULL) FILE *ftext = fopen("text.txt", "r+");
+	if(fcards == NULL) FILE *fauthor = fopen("author.txt", "r");
+
+	createCleanLists();
+
 	int err=0;
-	FILE *fcards = fopen("cards.bin", "r+b");
-	if(fcards == NULL){
+	if(fcards == NULL){		// check if file was really open/exists
 		fcards = fopen("cards.bin", "w+b");
 		return 0;
 	}
-	createCleanLists();
 	for(card* next=freadCard(fcards); next!=NULL; next=freadCard(fcards))
 		if( (err = putInListing(next)) ) {
 			putError(err);
@@ -244,7 +252,9 @@ card* getInsertion(){
 
 long writeText(char* text){
 			// write text to file and return (long) position pointer
-	
+
+
+	return 0;
 }
 
 char* getText(){
@@ -263,13 +273,19 @@ char* getText(){
 		text[i++] = c;
 	}
 	text[i++] = '\0';
+	text = (char*) realloc(text, i); 	// trim
 
 	return text;
 }
 
 byte getPriority(){
 			// get priority from input
-	 
+
+	printf("\nPlease enter the priority for the task:\n");
+	int value;
+	scanf("%d", &value);
+
+	return (byte) value;
 }
 
 
