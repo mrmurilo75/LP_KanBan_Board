@@ -51,9 +51,9 @@ CardList byCreation = NULL;
 
 int initialize(void){
 		// get .txt files from disk into memory and fill pointers
-	if(fcards == NULL) FILE *fcards = fopen("cards.bin", "r+b");
-	if(ftext == NULL) FILE *ftext = fopen("text.txt", "a+");
-	if(fauthor == NULL) FILE *fauthor = fopen("author.txt", "r");
+	if(fcards == NULL) fcards = fopen("cards.bin", "r+b");
+	if(ftext == NULL) ftext = fopen("text.txt", "a+");
+	if(fauthor == NULL) fauthor = fopen("author.txt", "r");
 
 	createCleanLists();
 
@@ -244,12 +244,12 @@ card* getInsertion(){
 	
 		// fill information that matters
 	newCard->column = TODO;
-	if( newCard->text = writeText(getText()) < 0) return -1;
-	if( newCard->priority = getPriority() < 0) return -1;
-	if( time( &(newCard->creation)) < 0) return -1;
+	if( ( newCard->text = writeText(getText()) ) < 0) return NULL;
+	if( ( newCard->priority = getPriority() ) < 0) return NULL;
+	if( ( time( &(newCard->creation)) ) < 0) return NULL;
 
 		// fill other spaces with null or equivalent
-	newCard->due = newCard->conclusion = newCard->author = NULL;
+	newCard->due = newCard->conclusion = newCard->author = -1;
 
 	return newCard;
 }
@@ -257,11 +257,11 @@ card* getInsertion(){
 long int writeText(char* text){
 			// write text to file and return (long) position pointer
 
-	if(ftext == NULL){
-		if( (ftext = fopen("text.txt", "w+")) == NULL) return -1;
+	if(ftext == NULL)
+		if( (ftext = fopen("text.txt", "w+")) == NULL) return -1L;
 
 	fseek(ftext, 0, SEEK_END);
-	long int pos = ftell();
+	long int pos = ftell(ftext);
 
 	if( fputs(text, ftext) < 0) return -1;		// writes to file whats in text argument (without null character)
 	if( fputc('\0', ftext) < 0) return -1;		// writes terminating null character
@@ -273,12 +273,12 @@ char* getText(){
 			// get text from input
 	printf("\nPlease enter the description for the task:\
 		( ! End text with Ctrl + D )\n\n");
-	int i=0;
 	const int size = 128; 		// size as 128 bytes block
 	int cur_size;
 	char* text = (char*) malloc( (cur_size = size*sizeof(char)) );
 	if(text == NULL) return NULL;
 
+	int i=0, c;
 	while( (c=getchar()) != EOF){
 		if(i > cur_size-1)
 			text = (char*) realloc(text, cur_size + size);
