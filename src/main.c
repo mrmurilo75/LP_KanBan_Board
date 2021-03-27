@@ -242,24 +242,32 @@ card* getInsertion(){
 			// get creation date using time.h
 
 	card *newCard = (card*) malloc(sizeof(card));
+	
+		// fill information that matters
 	newCard->column = TODO;
-	newCard->text = writeText(getText());
-	newCard->priority = getPriority();
-	time( &(newCard->creation));
+	if( newCard->text = writeText(getText()) < 0) return -1;
+	if( newCard->priority = getPriority() < 0) return -1;
+	if( time( &(newCard->creation)) < 0) return -1;
+
+		// fill other spaces with null or equivalent
+	newCard->due = newCard->conclusion = newCard->author = NULL;
 
 	return newCard;
 }
 
-long writeText(char* text){
+long int writeText(char* text){
 			// write text to file and return (long) position pointer
 
-	if(ftext != NULL){ 
+	if(ftext == NULL){
+		if( (ftext = fopen("text.txt", "w+")) == NULL) return -1;
 
-	} else{
-		fopen("text.txt", "w+");
+	fseek(ftext, 0, SEEK_END);
+	long int pos = ftell();
 
+	if( fputs(text, ftext) < 0) return -1;		// writes to file whats in text argument (without null character)
+	if( fputc('\0', ftext) < 0) return -1;		// writes terminating null character
 
-	return 0;
+	return pos;
 }
 
 char* getText(){
