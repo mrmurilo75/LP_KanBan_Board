@@ -9,7 +9,7 @@ int main(int argc, char* argv[]){
 				err = quit();
 				break;
 			case 1:
-				err = putTask(getInsertion());
+				err = putInListing(getInsertion());
 				break;
 			case 2:
 				err = openTask(getCard());
@@ -235,7 +235,6 @@ int get_option(void){
 	}
 	return -1;
 }
-
 
 card* getInsertion(){
 			// get text for text (description), priority and creation date

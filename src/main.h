@@ -38,8 +38,6 @@ int initialize(void);			// get .txt files from disk into memory and fill pointer
 int get_option(void); 			// get input option from user (1. insert,  2. open task...)
 //DONE
 
-int putTask(card *newTask); 		// get new task and make card in TODO column
-
 card* getInsertion();			// get text for description, priority and creation date
 //					// get creation date using time.h
 	long writeText(char* text);
