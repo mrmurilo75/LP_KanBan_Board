@@ -52,8 +52,8 @@ CardList byCreation = NULL;
 int initialize(void){
 		// get .txt files from disk into memory and fill pointers
 	if(fcards == NULL) FILE *fcards = fopen("cards.bin", "r+b");
-	if(fcards == NULL) FILE *ftext = fopen("text.txt", "r+");
-	if(fcards == NULL) FILE *fauthor = fopen("author.txt", "r");
+	if(ftext == NULL) FILE *ftext = fopen("text.txt", "a+");
+	if(fauthor == NULL) FILE *fauthor = fopen("author.txt", "r");
 
 	createCleanLists();
 
@@ -252,6 +252,11 @@ card* getInsertion(){
 
 long writeText(char* text){
 			// write text to file and return (long) position pointer
+
+	if(ftext != NULL){ 
+
+	} else{
+		fopen("text.txt", "w+");
 
 
 	return 0;
