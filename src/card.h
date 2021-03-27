@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 
 #ifndef BYTE_DEFINED
 typedef char byte;
@@ -14,7 +15,7 @@ typedef char byte;
 
 typedef struct {
 	long int text, author; //for use with ftell/fseek and for easier sorting
-	unsigned long int creation, due, conclusion;
+	time_t creation, due, conclusion;
 	byte priority;
 	byte column;
 
