@@ -230,16 +230,46 @@ int get_option(void){
 
 
 card* getInsertion(){
-			// get text for text (description), priority and due date
+			// get text for text (description), priority and creation date
 			// get creation date using time.h
 
-	card newCard();
+	card *newCard = (card*) malloc(sizeof(card));
 	newCard->column = TODO;
-	newCard->text = getText();
+	newCard->text = writeText(getText());
 	newCard->priority = getPriority();
-	newCard->creation = getCreation();
+	time( &(newCard->creation));
 
+	return newCard;
 }
 
+long writeText(char* text){
+			// write text to file and return (long) position pointer
+	
+}
+
+char* getText(){
+			// get text from input
+	printf("\nPlease enter the description for the task:\
+		( ! End text with Ctrl + D )\n\n");
+	int i=0;
+	const int size = 128; 		// size as 128 bytes block
+	int cur_size;
+	char* text = (char*) malloc( (cur_size = size*sizeof(char)) );
+	if(text == NULL) return NULL;
+
+	while( (c=getchar()) != EOF){
+		if(i > cur_size-1)
+			text = (char*) realloc(text, cur_size + size);
+		text[i++] = c;
+	}
+	text[i++] = '\0';
+
+	return text;
+}
+
+byte getPriority(){
+			// get priority from input
+	 
+}
 
 

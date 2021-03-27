@@ -40,9 +40,18 @@ int get_option(void); 			// get input option from user (1. insert,  2. open task
 
 int putTask(card *newTask); 		// get new task and make card in TODO column
 
-card* getInsertion();			// get text for description, priority and due date
-					// get creation date using time.h
-	int 
+card* getInsertion();			// get text for description, priority and creation date
+//					// get creation date using time.h
+	long writeText(char* text);
+	//DONE				// write text to file and return (long) position pointer
+
+	char* getText();
+	//DONE				// get text from input
+
+	byte getPriority();
+	//DONE				// get priority from input
+//
+//DONE
 
 card* getCard(void);			// get card reference from id (text position in file)
 
