@@ -48,10 +48,20 @@ card* getInsertion();			// get text for description, priority and creation date
 
 	byte getPriority();
 	//DONE				// get priority from input
+	long int getPositiveDecimal(void);
+				// get (long int) positive decimal from stdin
+				// other values or errors return negative
 //
 //DONE
 
 card* getCard(void);			// get card reference from id (text position in file)
+//
+	long int getId(void);
+					// get a card id from user
+					// NULL should return back to menu
+	long int fgetSize(FILE *file);
+	//DONE				// get file size
+//
 
 int openTask(card *reference);		// move task from TODO to DOING
 					// get and set author, get and set due date
@@ -79,5 +89,6 @@ void putError(int err);			// print error message to stderr
 // NOT DONE (temporarily defined)
 
 int quit(void);				// save state and quit
+// NOT DONE (temporarily defined)
 
 #endif // MAIN_HEADER_INCLUDED

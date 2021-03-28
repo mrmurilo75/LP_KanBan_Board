@@ -273,7 +273,7 @@ long int writeText(char* text){		// ! non-portable
 }
 
 char* getText(){	// ! non-portable
-			// get text from input
+		// get text from input
 	printf("\nPlease enter the description for the task:\n\
 		( ! End text with Ctrl + G then Enter)\n\n");
 	const int size = 128; 		// size as 128 bytes block
@@ -300,27 +300,71 @@ byte getPriority(){
 	for(;;){
 		printf("\nPlease enter the priority for the task:\n"
 			"(from 1 to 10 | 0 to return to main menu)\n\t");
-		int value = getchar(), c=getchar();
-		if( (value >='0' && value <= '9') ){
-			if(c =='\n'){
-				if(value == '0')
-					quit();
-				return (byte) (value-'0');
-			}
-			if(c =='0' && getchar()=='\n')
-				return (byte) 10;
+		long int value = getPositiveDecimal();
+		if(value >= 1 && value <= 10)
+			return (byte) value;
+		if(value == 0){
+			quit();
+			return 0;
 		}
-		if(c != '\n') 
-			while(getchar() != '\n');
-		printf("\nTem que colocar um valor válido!\n\n");
+		printf("\nPlease enter a valid input!\n\n");
 	}
 
 	return (byte) -1;
 }
 
+long int getPositiveDecimal() {
+				// get (long int) positive decimal from stdin
+				// other values or errors return negative
 
+	int c, cur = 0;
+	while( (c =getchar()) >= '0' && c <='9'){
+		cur *=10;
+		cur += (c - '0');
+	}
+	if(c != '\n'){
+		while(getchar() != '\n');
+		return -1;
+	}
+	
+	return cur;
+}
 
+card* getCard(){
+			// get card reference from id (text position in file)
 
+	long int id = getId();
+
+	// get from byCreation
+
+	return NULL;
+}
+
+long int getId(){
+			// get a card id from user
+			// NULL should return back to menu
+
+	printf("\nPlease enter the id for the task:\n"
+		"(an invalid value returns to main menu)\n");
+	long int maxValue = fgetSize(ftext);
+	int cur = getPositiveDecimal();
+	if(cur < maxValue)		// maxValue is supposed to be '\0'
+		return cur;
+
+	printf("Invalid input ! Return to menu...");
+	return -1;
+}
+
+long int fgetSize(FILE *file){
+				// get file size
+
+	long int old_pos = ftell(file);
+	fseek(file, 0, SEEK_END);
+	long int res = ftell(file);
+	fseek(file, old_pos, SEEK_SET);
+
+	return res;
+}
 
 void putError(int err){
 			// print error message to stderr
