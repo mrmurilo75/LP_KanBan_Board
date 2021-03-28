@@ -102,9 +102,35 @@ int get_option(void){
 }
 
 int putTask(card *reference){
-			// get new task from user and put it in memory
-	putInListing(reference);
+			// get card reference and put write it to memory and files
+
+	int err = putInListing(reference);
+	if(!err) 
+		err = writeCard(reference);
+
+	if(!err) 
+		printf("Card added successfully.\n");
+	else
+		printf("We're sorry, but there was an error !\n");
+	printf("Returning to menu...\n\n");
+
+	return err;
+
 }
+
+int writeCard(card* reference){		// ! non-portable
+				// write card to file and return error or 0
+
+	if(fcards == NULL)
+		if( (fcards = fopen("cards.bin", "wb+")) == NULL) return -1;
+
+	fseek(fcards, 0, SEEK_END);
+
+	if( fwrite(reference, sizeof(card), 1, fcards) != 1) return -1;
+
+	return 0;
+}
+
 
 card* getInsertion(){
 			// get text for text (description), priority and creation date

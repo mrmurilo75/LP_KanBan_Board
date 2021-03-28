@@ -37,6 +37,8 @@ long int getPositiveDecimal(void);	// get (long int) positive decimal from stdin
 long int fgetSize(FILE *file);		// get file size
 //DONE
 
+int writeCard(card* reference);		// write card to file and return error or 0
+
 int putTask(card *reference);		// get card reference and put it in memory
 //DONE
 
