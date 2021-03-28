@@ -142,7 +142,7 @@ int putByAuthor(cardNode* input, cardNode* now, cardNode* prev){
 
 	if(input->value->author <= now->value->author)
 		return putIn(BYAUTHOR, input, prev, now);
-	return putByAll(input, now->nextByAuthor, now);
+	return putByAuthor(input, now->nextByAuthor, now);
 
 	return -1;
 }
@@ -153,7 +153,7 @@ int putByCreation(cardNode* input, cardNode* now, cardNode* prev){
 
 	if(input->value->creation <= now->value->creation)
 		return putIn(BYCREATION, input, prev, now);
-	return putByAll(input, now->nextByCreation, now);
+	return putByCreation(input, now->nextByCreation, now);
 
 	return -1;
 }
@@ -334,6 +334,9 @@ card* getCard(){
 			// get card reference from id (text position in file)
 
 	long int id = getId();
+	if(id < 0) return NULL;
+
+	while
 
 	// get from byCreation
 
