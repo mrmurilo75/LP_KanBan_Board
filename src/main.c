@@ -255,12 +255,23 @@ int viewByAuthor() {
 
 
 	while (now->value != NULL) {
-		printf("Autor do card");
+		printf("Autor do card: ");
 		fseek(fauthor,now->value->author, SEEK_SET);
 		char c;
 		while((c=fgetc(fauthor)) != '\0') {
 			putchar(c);	
-		} 
+		}
+		printf("\n");
+		printf("Descrição da tarefa: ");
+		fseek(ftext,now->value->text, SEEK_SET);
+		c = '.';
+		while((c=fgetc(ftext)) != '\0') {
+			putchar(c);	
+		}
+		printf ("Prioridade da Tarefa = %c\n", now->value->priority);
+		printf ("Tarefa da Coluna: %c\n", now->value->column);
+		printf ("Data de Criação: %s", ctime (&now->value->creation));
+		printf ("Prazo Maximo de Conclusao: %s", ctime (&now->value->due));
 		now = now->nextByAuthor;
 	}
 	
