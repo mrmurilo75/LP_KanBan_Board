@@ -151,4 +151,6 @@ cardNode* getCard(long int id){
 	return NULL;
 }
 
+
+
 #endif 		// LIST_C_INCLUDED

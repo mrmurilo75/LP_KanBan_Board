@@ -28,11 +28,11 @@ int main(int argc, char* argv[]){
 				break;
 			case 6:
 				err = fullView();
-				break;
+				break;*/
 			case 7:
 				err = viewByAuthor();
 				break;
-			case 8:
+			/*case 8:
 				err = viewByCreation();
 				break;
 */			default:
@@ -249,6 +249,25 @@ long int fgetSize(FILE *file){
 	return res;
 }
 
+
+int viewByAuthor() {
+	cardNode* now = byAuthor;
+
+
+	while (now->value != NULL) {
+		printf("Autor do card");
+		fseek(fauthor,now->value->author, SEEK_SET);
+		char c;
+		while((c=fgetc(fauthor)) != '\0') {
+			putchar(c);	
+		} 
+		now = now->nextByAuthor;
+	}
+	
+	return 0;
+}
+
+
 void putError(int err){
 			// print error message to stderr
 
@@ -259,3 +278,4 @@ void putError(int err){
 int quit(){
 	exit(0);
 }
+

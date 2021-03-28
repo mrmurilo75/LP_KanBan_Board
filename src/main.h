@@ -60,7 +60,7 @@ int fullView(void);			// view from the organized linked list (
 
 int viewByCreation(void);		// view all by creation date
 
-int viewByAuthor(long int author);	// view all by Author (only DOING and DONE)
+int viewByAuthor();	// view all by Author (only DOING and DONE)
 
 void putError(int err);			// print error message to stderr
 // NOT DONE (temporarily defined)
