@@ -138,4 +138,17 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next){
 	return 0;
 }
 
+cardNode* getCard(long int id){
+				// get card reference from id (text position in file)
+
+	if(id < 0) return NULL;
+
+	for(CardList now = byCreation; now->value != NULL; now = now->nextByCreation){
+		if(now->value->text == id)
+			return now;
+	}
+
+	return NULL;
+}
+
 #endif 		// LIST_C_INCLUDED

@@ -28,7 +28,7 @@ card* getInsertion();			// get text for description, priority and creation date
 //
 //DONE
 
-long int getId(void);			// get a card id from user
+long int getCardId(void);			// get a card id from user
 //DONE					// NULL should return back to menu
 
 long int getPositiveDecimal(void);	// get (long int) positive decimal from stdin
@@ -37,7 +37,8 @@ long int getPositiveDecimal(void);	// get (long int) positive decimal from stdin
 long int fgetSize(FILE *file);		// get file size
 //DONE
 
-int putTask(card *reference);		// get new task from user and put it in memory
+int putTask(card *reference);		// get card reference and put it in memory
+//DONE
 
 int openTask(card *reference);		// move task from TODO to DOING
 					// get and set author, get and set due date

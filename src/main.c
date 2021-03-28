@@ -12,19 +12,19 @@ int main(int argc, char* argv[]){
 				err = quit();
 				break;
 */			case 1:
-				err = putInListing(getInsertion());
+				err = putTask(getInsertion());
 				break;
 /*			case 2:
-				err = openTask(getCard());
+				err = openTask((getCardId()));
 				break;
 			case 3:
-				err = changeAuthor(getCard());
+				err = changeAuthor(getCardId()));
 				break;
 			case 4:
-				err = closeTask(getCard());
+				err = closeTask(getCardId()));
 				break;
 			case 5:
-				err = reopenTask(getCard());
+				err = reopenTask(getCardId()));
 				break;
 			case 6:
 				err = fullView();
@@ -99,6 +99,11 @@ int get_option(void){
 
 	}
 	return -1;
+}
+
+int putTask(card *reference){
+			// get new task from user and put it in memory
+	putInListing(reference);
 }
 
 card* getInsertion(){
@@ -192,22 +197,7 @@ long int getPositiveDecimal() {
 	return cur;
 }
 
-cardNode* getCard(long int id){
-			// get card reference from id (text position in file)
-
-	id = getId();
-
-	if(id < 0) return NULL;
-
-	for(CardList now = byCreation; now->value != NULL; now = now->nextByCreation){
-		if(now->value->text == id)
-			return now;
-	}
-
-	return NULL;
-}
-
-long int getId(){
+long int getCardId(){
 			// get a card id from user
 			// NULL should return back to menu
 

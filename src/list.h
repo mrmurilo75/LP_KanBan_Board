@@ -31,4 +31,5 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next);
 
 cardNode* getCard(long int id);		// get card reference from id (text position in file)
 //DONE
+
 #endif  // LIST_HEADER_INCLUDED
