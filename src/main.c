@@ -254,7 +254,7 @@ card* getInsertion(){
 	return newCard;
 }
 
-long int writeText(char* text){
+long int writeText(char* text){		// ! non-portable
 			// write text to file and return (long) position pointer
 
 	if(ftext == NULL)
@@ -269,17 +269,17 @@ long int writeText(char* text){
 	return pos;
 }
 
-char* getText(){
+char* getText(){	// ! non-portable
 			// get text from input
 	printf("\nPlease enter the description for the task:\
-		( ! End text with Ctrl + D )\n\n");
+		( ! End text with Ctrl + M )\n\n");
 	const int size = 128; 		// size as 128 bytes block
 	int cur_size;
 	char* text = (char*) malloc( (cur_size = size*sizeof(char)) );
 	if(text == NULL) return NULL;
 
 	int i=0, c;
-	while( (c=getchar()) != EOF){
+	while( (c=getchar()) != '\r'){
 		if(i > cur_size-1)
 			text = (char*) realloc(text, cur_size + size);
 		text[i++] = c;
