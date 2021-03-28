@@ -336,7 +336,8 @@ card* getCard(){
 	long int id = getId();
 	if(id < 0) return NULL;
 
-	while
+	card *res;
+	for(CardList now = byCreation; (res = now->value)->text != id; now = now->nextByCreation);
 
 	// get from byCreation
 
