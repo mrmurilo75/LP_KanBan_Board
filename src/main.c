@@ -230,7 +230,7 @@ int get_option(void){
 		else{
 			if(c != '\n') 
 				while(getchar() != '\n');
-			printf("Tem que escolher uma opção válida!\n");
+			printf("\nTem que escolher uma opção válida!\n\n");
 			opt=10;
 			continue;
 		}
@@ -275,14 +275,14 @@ long int writeText(char* text){		// ! non-portable
 char* getText(){	// ! non-portable
 			// get text from input
 	printf("\nPlease enter the description for the task:\n\
-		( ! End text with Ctrl + M )\n\n");
+		( ! End text with Ctrl + G then Enter)\n\n");
 	const int size = 128; 		// size as 128 bytes block
 	int cur_size;
 	char* text = (char*) malloc( (cur_size = size*sizeof(char)) );
 	if(text == NULL) return NULL;
 
 	int i=0, c;
-	while( (c=getchar()) != '\r'){
+	while( (c=getchar()) != 0x07){
 		if(i > cur_size-1)
 			text = (char*) realloc(text, cur_size + size);
 		text[i++] = c;
