@@ -38,20 +38,21 @@ long int fgetSize(FILE *file);		// get file size
 //DONE
 
 int writeCard(card* reference);		// write card to file and return error or 0
+//DONE
 
 int putTask(card *reference);		// get card reference and put it in memory
 //DONE
 
-int openTask(card *reference);		// move task from TODO to DOING
+int openTask(long int id);		// move task from TODO to DOING
 					// get and set author, get and set due date
 
-int closeTask(card *reference);		// move task from DOING to DONE
+int closeTask(long int id);		// move task from DOING to DONE
 					// set conclusion date with time.h
 
-int reopenTask(card *reference);	// move task from DONE to TODO
+int reopenTask(long int id);	// move task from DONE to TODO
 					// get and reset priority
 
-int changeAuthor(card *reference);	// change Author
+int changeAuthor(long int id);	// change Author
 
 int fullView(void);			// view from the organized linked list (
 					//					TODO by priority then creation,
