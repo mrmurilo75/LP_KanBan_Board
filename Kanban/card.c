@@ -1,5 +1,8 @@
 #include "card.h"
 
+#ifndef CARD_C_INCLUDED
+#define CARD_C_INCLUDED
+
 card* freadCard(FILE * stream){
 	if(stream != NULL){
 		card *Card = (card *) malloc(sizeof(card));
@@ -9,3 +12,5 @@ card* freadCard(FILE * stream){
 
 	return NULL;
 }
+
+#endif 		// CARD_C_INCLUDED
