@@ -32,6 +32,7 @@ typedef struct card_node{
 } cardNode;
         
 
+card* clearCard(void);		// clear all card fields with NULL or similar
 
 card* freadCard(FILE* stream);	// malloc space for a card and fill from stream
 
