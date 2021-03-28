@@ -62,8 +62,6 @@ int viewByCreation(void);		// view all by creation date
 
 int viewByAuthor(long int author);	// view all by Author (only DOING and DONE)
 
-long int getAuthor(void);		// read Author from input
-
 void putError(int err);			// print error message to stderr
 // NOT DONE (temporarily defined)
 

@@ -30,7 +30,7 @@ int main(int argc, char* argv[]){
 				err = fullView();
 				break;
 			case 7:
-				err = viewByAuthor(getAuthor());
+				err = viewByAuthor();
 				break;
 			case 8:
 				err = viewByCreation();
