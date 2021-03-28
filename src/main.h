@@ -75,7 +75,8 @@ int viewByAuthor(long int author);	// view all by Author (only DOING and DONE)
 
 long int getAuthor(void);		// read Author from input
 
-int putError(int err);			// print error message to stderr
+void putError(int err);			// print error message to stderr
+// NOT DONE (temporarily defined)
 
 int quit(void);				// save state and quit
 

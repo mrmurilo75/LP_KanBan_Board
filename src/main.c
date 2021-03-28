@@ -5,13 +5,13 @@ int main(int argc, char* argv[]){
 	int err=initialize(), opt;
 	while( (opt=get_option()) && !err){	//opt == 0 to quit
 		switch(opt){
-			case 0:
+/*			case 0:
 				err = quit();
 				break;
-			case 1:
+*/			case 1:
 				err = putInListing(getInsertion());
 				break;
-			case 2:
+/*			case 2:
 				err = openTask(getCard());
 				break;
 			case 3:
@@ -32,12 +32,12 @@ int main(int argc, char* argv[]){
 			case 8:
 				err = viewByCreation();
 				break;
-			default:
+*/			default:
 				(err)? putError(err) : 0;
 		}
 	}
 	if(err)
-		return putError(err);
+		putError(err);
 	return 0;
 }
 
@@ -301,3 +301,12 @@ byte getPriority(){
 }
 
 
+
+
+
+void putError(int err){
+			// print error message to stderr
+
+	fprintf(stderr, "There was an error");
+	exit(0);
+}
