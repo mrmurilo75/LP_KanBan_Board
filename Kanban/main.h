@@ -14,15 +14,54 @@
 #define MAIN_HEADER_INCLUDED
 
 int initialize(void);			// get .txt files from disk into memory and fill pointers
+//Auxiliar functions:
+	void createCleanLists(void);		//create clean list for byAll, byAuthor, byCreator linked lists
+	//DONE
+
+	int putInListing(card* next);		// put card in all list in corret sorted position
+	//DONE
+
+	int putByAll(cardNode* input, cardNode* now, cardNode* prev);
+	//DONE					// puts cards in byAll list
+
+	int putByAuthor(cardNode* input, cardNode* now, cardNode* prev);
+	//DONE					// puts cards in byAuthor list
+
+	int putByCreation(cardNode* input, cardNode* now, cardNode* prev);
+	//DONE					// puts cards in byCreation list
+
+	int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next);
+	//DONE					// effectively puts the given card 'now' between 'prev' and 'next'
+//
+//DONE
 
 int get_option(void); 			// get input option from user (1. insert,  2. open task...)
+//DONE
 
-int putTask(card *newTask); 		// get new task and make card in TODO column
+card* getInsertion();			// get text for description, priority and creation date
+//					// get creation date using time.h
+	long writeText(char* text);
+	//DONE				// write text to file and return (long) position pointer
 
-card* getInsertion();			// get text for description, priority and due date
-					// get creation date using time.h
+	char* getText();
+	//DONE				// get text from input
+
+	byte getPriority();
+	//DONE				// get priority from input
+	long int getPositiveDecimal(void);
+				// get (long int) positive decimal from stdin
+				// other values or errors return negative
+//
+//DONE
 
 card* getCard(void);			// get card reference from id (text position in file)
+//
+	long int getId(void);
+					// get a card id from user
+					// NULL should return back to menu
+	long int fgetSize(FILE *file);
+	//DONE				// get file size
+//
 
 int openTask(card *reference);		// move task from TODO to DOING
 					// get and set author, get and set due date
@@ -46,20 +85,10 @@ int viewByAuthor(long int author);	// view all by Author (only DOING and DONE)
 
 long int getAuthor(void);		// read Author from input
 
-int putError(int err);			// print error message to stderr
+void putError(int err);			// print error message to stderr
+// NOT DONE (temporarily defined)
 
 int quit(void);				// save state and quit
-
-void createCleanLists(void);		//create clean list for byAll, byAuthor, byCreator linked lists
-
-int putInListing(card* next);		// put card in all list in corret sorted position
-
-int putByAll(cardNode* input, cardNode* now, cardNode* prev);
-					// puts cards in byAll list
-int putByAuthor(cardNode* input, cardNode* now, cardNode* prev);
-					// puts cards in byAuthor list
-
-int putByCreation(cardNode* input, cardNode* now, cardNode* prev);
-					// puts cards in byCreation list
+// NOT DONE (temporarily defined)
 
 #endif // MAIN_HEADER_INCLUDED

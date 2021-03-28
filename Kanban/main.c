@@ -1,3 +1,5 @@
+#include <string.h>
+#include <stdio.h>
 #include "main.h"
 #include "card.c"
 
@@ -5,13 +7,13 @@ int main(int argc, char* argv[]){
 	int err=initialize(), opt;
 	while( (opt=get_option()) && !err){	//opt == 0 to quit
 		switch(opt){
-			case 0:
+/*			case 0:
 				err = quit();
 				break;
-			case 1:
-				err = putTask(getInsertion());
+*/			case 1:
+				err = putInListing(getInsertion());
 				break;
-			case 2:
+/*			case 2:
 				err = openTask(getCard());
 				break;
 			case 3:
@@ -32,28 +34,36 @@ int main(int argc, char* argv[]){
 			case 8:
 				err = viewByCreation();
 				break;
-			default:
+*/			default:
 				(err)? putError(err) : 0;
 		}
 	}
 	if(err)
-		return putError(err);
+		putError(err);
 	return 0;
 }
 
-CardList byAll;
-CardList byAuthor;
-CardList byCreation;
+FILE* fcards = NULL;
+FILE* ftext = NULL;
+FILE* fauthor = NULL;
+
+CardList byAll = NULL;
+CardList byAuthor = NULL;
+CardList byCreation = NULL;
 
 int initialize(void){
 		// get .txt files from disk into memory and fill pointers
+	if(fcards == NULL) fcards = fopen("cards.bin", "r+b");
+	if(ftext == NULL) ftext = fopen("text.txt", "a+");
+	if(fauthor == NULL) fauthor = fopen("author.txt", "r");
+
+	createCleanLists();
+
 	int err=0;
-	FILE *fcards = fopen("cards.bin", "r+b");
-	if(fcards == NULL){
+	if(fcards == NULL){		// check if file was really open/exists
 		fcards = fopen("cards.bin", "w+b");
 		return 0;
 	}
-	createCleanLists();
 	for(card* next=freadCard(fcards); next!=NULL; next=freadCard(fcards))
 		if( (err = putInListing(next)) ) {
 			putError(err);
@@ -94,9 +104,6 @@ int putInListing(card* next){
 	return err;
 }
 
-
-int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next);
-
 int putByAll(cardNode* input, cardNode* now, cardNode* prev){
 	if( now->value == NULL)		// list is empty or we've reached the end
 		return putIn(BYALL, input, prev, now);
@@ -135,7 +142,7 @@ int putByAuthor(cardNode* input, cardNode* now, cardNode* prev){
 
 	if(input->value->author <= now->value->author)
 		return putIn(BYAUTHOR, input, prev, now);
-	return putByAll(input, now->nextByAuthor, now);
+	return putByAuthor(input, now->nextByAuthor, now);
 
 	return -1;
 }
@@ -146,7 +153,7 @@ int putByCreation(cardNode* input, cardNode* now, cardNode* prev){
 
 	if(input->value->creation <= now->value->creation)
 		return putIn(BYCREATION, input, prev, now);
-	return putByAll(input, now->nextByCreation, now);
+	return putByCreation(input, now->nextByCreation, now);
 
 	return -1;
 }
@@ -203,30 +210,173 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next){
 int get_option(void){
 	int opt=9;
 	while(opt){
-		if(opt==9){
-			printf("**************MENU**************\
-				1 - Inserir tarefa em 'To Do'\
-				2 - Mover cartão de 'To Do' para 'Doing'\
-				3 - Alterar pessoas responsável\
-				4 - Fechar tarefa\
-				5 - Reabrir tarefa\
-				6 - Visualizar o quadro\
-				7 - Visualizar tarefas de uma pessoa\
-				8 - Visualizar tarefas por ordem de criação\
-				0 - Sair\
-				********************************\
-				Insira a opção pretendida: ");
-		}
+		printf(	"**************MENU**************\n"
+			"1 - Inserir tarefa em 'To Do'\n"
+			"2 - Mover cartão de 'To Do' para 'Doing'\n"
+			"3 - Alterar pessoas responsável\n"
+			"4 - Fechar tarefa\n"
+			"5 - Reabrir tarefa\n"
+			"6 - Visualizar o quadro\n"
+			"7 - Visualizar tarefas de uma pessoa\n"
+			"8 - Visualizar tarefas por ordem de criação\n"
+			"0 - Sair\n"
+			"********************************\n"
+			"Insira a opção pretendida: ");
 
-		scanf("%d",&opt);
-		if(!ferror(stdin) && opt>=0 && opt<=8){
+		opt = getchar();
+		int c;
+		if( (c=getchar()) == '\n' && (opt-='0') >= 0 && opt <= 8 )
 			return opt;
-		} else {
-			printf("Tem que escolher uma opção válida!\
-				9-Para ver menu novamente");
+		else{
+			if(c != '\n') 
+				while(getchar() != '\n');
+			printf("\nTem que escolher uma opção válida!\n\n");
 			opt=10;
+			continue;
 		}
 
 	}
 	return -1;
+}
+
+card* getInsertion(){
+			// get text for text (description), priority and creation date
+			// get creation date using time.h
+
+	card *newCard = (card*) malloc(sizeof(card));
+	
+		// fill information that matters
+	newCard->column = TODO;
+	if( ( newCard->text = writeText(getText()) ) < 0) return NULL;
+	if( ( newCard->priority = getPriority() ) < 0) return NULL;
+	if( ( time( &(newCard->creation)) ) < 0) return NULL;
+
+		// fill other spaces with null or equivalent
+	newCard->due = newCard->conclusion = newCard->author = -1;
+
+	return newCard;
+}
+
+long int writeText(char* text){		// ! non-portable
+			// write text to file and return (long) position pointer
+
+	if(ftext == NULL)
+		if( (ftext = fopen("text.txt", "w+")) == NULL) return -1L;
+
+	fseek(ftext, 0, SEEK_END);
+	long int pos = ftell(ftext);
+
+	if( fputs(text, ftext) < 0) return -1;		// writes to file whats in text argument (without null character)
+	if( fputc('\0', ftext) < 0) return -1;		// writes terminating null character
+
+	return pos;
+}
+
+char* getText(){	// ! non-portable
+		// get text from input
+	printf("\nPlease enter the description for the task:\n\
+		( ! End text with Ctrl + G then Enter)\n\n");
+	const int size = 128; 		// size as 128 bytes block
+	int cur_size;
+	char* text = (char*) malloc( (cur_size = size*sizeof(char)) );
+	if(text == NULL) return NULL;
+
+	int i=0, c;
+	while( (c=getchar()) != 0x07){
+		if(i > cur_size-1)
+			text = (char*) realloc(text, cur_size + size);
+		text[i++] = c;
+	}
+	if( getchar() != '\n') putError(0);
+	text[i++] = '\0';
+	text = (char*) realloc(text, i); 	// trim
+
+	return text;
+}
+
+byte getPriority(){
+			// get priority from input
+
+	for(;;){
+		printf("\nPlease enter the priority for the task:\n"
+			"(from 1 to 10 | 0 to return to main menu)\n\t");
+		long int value = getPositiveDecimal();
+		if(value >= 1 && value <= 10)
+			return (byte) value;
+		if(value == 0){
+			quit();
+			return 0;
+		}
+		printf("\nPlease enter a valid input!\n\n");
+	}
+
+	return (byte) -1;
+}
+
+long int getPositiveDecimal() {
+				// get (long int) positive decimal from stdin
+				// other values or errors return negative
+
+	int c, cur = 0;
+	while( (c =getchar()) >= '0' && c <='9'){
+		cur *=10;
+		cur += (c - '0');
+	}
+	if(c != '\n'){
+		while(getchar() != '\n');
+		return -1;
+	}
+	
+	return cur;
+}
+
+card* getCard(){
+			// get card reference from id (text position in file)
+
+	long int id = getId();
+	if(id < 0) return NULL;
+
+	for(CardList now = byCreation; now->value != NULL; now = now->nextByCreation){
+		if(now->value->text == id)
+			return now->value;
+	}
+
+	return NULL;
+}
+
+long int getId(){
+			// get a card id from user
+			// NULL should return back to menu
+
+	printf("\nPlease enter the id for the task:\n"
+		"(an invalid value returns to main menu)\n");
+	long int maxValue = fgetSize(ftext);
+	int cur = getPositiveDecimal();
+	if(cur < maxValue)		// maxValue is supposed to be '\0'
+		return cur;
+
+	printf("Invalid input ! Return to menu...");
+	return -1;
+}
+
+long int fgetSize(FILE *file){
+				// get file size
+
+	long int old_pos = ftell(file);
+	fseek(file, 0, SEEK_END);
+	long int res = ftell(file);
+	fseek(file, old_pos, SEEK_SET);
+
+	return res;
+}
+
+void putError(int err){
+			// print error message to stderr
+
+	fprintf(stderr, "There was an error");
+	exit(0);
+}
+
+int quit(){
+	exit(0);
 }
