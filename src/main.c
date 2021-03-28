@@ -1,3 +1,5 @@
+#include <string.h>
+#include <stdio.h>
 #include "main.h"
 #include "card.c"
 
@@ -208,28 +210,29 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next){
 int get_option(void){
 	int opt=9;
 	while(opt){
-		if(opt==9){
-			printf("**************MENU**************\
-				1 - Inserir tarefa em 'To Do'\
-				2 - Mover cartão de 'To Do' para 'Doing'\
-				3 - Alterar pessoas responsável\
-				4 - Fechar tarefa\
-				5 - Reabrir tarefa\
-				6 - Visualizar o quadro\
-				7 - Visualizar tarefas de uma pessoa\
-				8 - Visualizar tarefas por ordem de criação\
-				0 - Sair\
-				********************************\
-				Insira a opção pretendida: ");
-		}
+		printf(	"**************MENU**************\n"
+			"1 - Inserir tarefa em 'To Do'\n"
+			"2 - Mover cartão de 'To Do' para 'Doing'\n"
+			"3 - Alterar pessoas responsável\n"
+			"4 - Fechar tarefa\n"
+			"5 - Reabrir tarefa\n"
+			"6 - Visualizar o quadro\n"
+			"7 - Visualizar tarefas de uma pessoa\n"
+			"8 - Visualizar tarefas por ordem de criação\n"
+			"0 - Sair\n"
+			"********************************\n"
+			"Insira a opção pretendida: ");
 
-		scanf("%d",&opt);
-		if(!ferror(stdin) && opt>=0 && opt<=8){
+		opt = getchar();
+		int c;
+		if( (c=getchar()) == '\n' && (opt-='0') >= 0 && opt <= 8 )
 			return opt;
-		} else {
-			printf("Tem que escolher uma opção válida!\
-				9-Para ver menu novamente");
+		else{
+			if(c != '\n') 
+				while(getchar() != '\n');
+			printf("Tem que escolher uma opção válida!\n");
 			opt=10;
+			continue;
 		}
 
 	}
@@ -271,7 +274,7 @@ long int writeText(char* text){		// ! non-portable
 
 char* getText(){	// ! non-portable
 			// get text from input
-	printf("\nPlease enter the description for the task:\
+	printf("\nPlease enter the description for the task:\n\
 		( ! End text with Ctrl + M )\n\n");
 	const int size = 128; 		// size as 128 bytes block
 	int cur_size;
