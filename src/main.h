@@ -44,7 +44,17 @@ int putTask(card *reference);		// get card reference and put it in memory
 //DONE
 
 int openTask(long int id);		// move task from TODO to DOING
-					// get and set author, get and set due date
+//					// get and set author, get and set due date
+//
+	char* getAuthor(void);
+					// reads author from stdin
+
+	long int writeAuthor(char* newAuthor);
+					// write author to file and return (long int) position
+
+	long int getDueDate();
+					// get due date from stdin
+//
 
 int closeTask(long int id);		// move task from DOING to DONE
 					// set conclusion date with time.h

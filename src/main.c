@@ -136,18 +136,15 @@ card* getInsertion(){
 			// get text for text (description), priority and creation date
 			// get creation date using time.h
 
-	card *newCard = (card*) malloc(sizeof(card));
+	card *newC = newCard();
 	
 		// fill information that matters
-	newCard->column = TODO;
-	if( ( newCard->text = writeText(getText()) ) < 0) return NULL;
-	if( ( newCard->priority = getPriority() ) < 0) return NULL;
-	if( ( time( &(newCard->creation)) ) < 0) return NULL;
+	newC->column = TODO;
+	if( ( newC->text = writeText(getText()) ) < 0) return NULL;
+	if( ( newC->priority = getPriority() ) < 0) return NULL;
+	if( ( time( &(newC->creation)) ) < 0) return NULL;
 
-		// fill other spaces with null or equivalent
-	newCard->due = newCard->conclusion = newCard->author = -1;
-
-	return newCard;
+	return newC;
 }
 
 long int writeText(char* text){		// ! non-portable
@@ -247,6 +244,39 @@ long int fgetSize(FILE *file){
 	fseek(file, old_pos, SEEK_SET);
 
 	return res;
+}
+
+int openTask(long int id){
+				// move task from TODO to DOING
+				// get and set author, get and set due date
+
+	card* newC = newCard();
+
+	newC->column = DOING;
+	newC->author = writeAuthor(getAuthor());
+	newC->due = getDueDate();
+
+	int err = updateInListing(id, newC);
+
+	return err;
+}
+
+char* getAuthor(){
+			// reads author from stdin
+
+	return NULL;
+}
+
+long int writeAuthor(char* newAuthor){
+					// write author to file and return (long int) position
+
+	return -1;
+}
+
+long int getDueDate(){
+			// get due date from stdin
+
+	return -1;
 }
 
 void putError(int err){
