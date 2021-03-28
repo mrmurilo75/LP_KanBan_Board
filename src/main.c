@@ -330,7 +330,7 @@ long int getPositiveDecimal() {
 	return cur;
 }
 
-card* getCard(){
+cardNode* getCard(){
 			// get card reference from id (text position in file)
 
 	long int id = getId();

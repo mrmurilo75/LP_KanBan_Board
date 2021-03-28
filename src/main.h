@@ -54,7 +54,7 @@ card* getInsertion();			// get text for description, priority and creation date
 //
 //DONE
 
-card* getCard(void);			// get card reference from id (text position in file)
+cardNode* getCard(void);			// get card reference from id (text position in file)
 //
 	long int getId(void);
 					// get a card id from user
