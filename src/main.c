@@ -287,6 +287,7 @@ char* getText(){	// ! non-portable
 			text = (char*) realloc(text, cur_size + size);
 		text[i++] = c;
 	}
+	if( getchar() != '\n') putError(0);
 	text[i++] = '\0';
 	text = (char*) realloc(text, i); 	// trim
 
@@ -296,11 +297,25 @@ char* getText(){	// ! non-portable
 byte getPriority(){
 			// get priority from input
 
-	printf("\nPlease enter the priority for the task:\n");
-	int value;
-	scanf("%d", &value);
+	for(;;){
+		printf("\nPlease enter the priority for the task:\n"
+			"(from 1 to 10 | 0 to return to main menu)\n\t");
+		int value = getchar(), c=getchar();
+		if( (value >='0' && value <= '9') ){
+			if(c =='\n'){
+				if(value == '0')
+					quit();
+				return (byte) (value-'0');
+			}
+			if(c =='0' && getchar()=='\n')
+				return (byte) 10;
+		}
+		if(c != '\n') 
+			while(getchar() != '\n');
+		printf("\nTem que colocar um valor válido!\n\n");
+	}
 
-	return (byte) value;
+	return (byte) -1;
 }
 
 
@@ -311,5 +326,9 @@ void putError(int err){
 			// print error message to stderr
 
 	fprintf(stderr, "There was an error");
+	exit(0);
+}
+
+int quit(){
 	exit(0);
 }
