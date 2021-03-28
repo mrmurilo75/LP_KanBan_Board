@@ -336,10 +336,10 @@ card* getCard(){
 	long int id = getId();
 	if(id < 0) return NULL;
 
-	card *res;
-	for(CardList now = byCreation; (res = now->value)->text != id; now = now->nextByCreation);
-
-	// get from byCreation
+	for(CardList now = byCreation; now->value != NULL; now = now->nextByCreation){
+		if(now->value->text == id)
+			return now->value;
+	}
 
 	return NULL;
 }
