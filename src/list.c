@@ -151,4 +151,10 @@ cardNode* getCard(long int id){
 	return NULL;
 }
 
+int updateInListing(long int id, card *newC){
+						// update an card from id, using non-negative values from newC
+
+
+}
+
 #endif 		// LIST_C_INCLUDED
