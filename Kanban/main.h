@@ -1,5 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <ctype.h>
 #include "card.h"
 
 #define TODO 1
@@ -17,11 +20,14 @@ int get_option(void); 			// get input option from user (1. insert,  2. open task
 
 card* getInsertion();			// get text for description, priority and creation date
 //					// get creation date using time.h
-	long writeText(char* text);
+	long writeText(FILE* file, const char* fname, const char* text);
 	//DONE				// write text to file and return (long) position pointer
 
 	char* getText();
 	//DONE				// get text from input
+
+	char* readInput(const char control);
+	//DONE				// read text from input until a control character
 
 	byte getPriority();
 	//DONE				// get priority from input
@@ -38,20 +44,37 @@ long int fgetSize(FILE *file);		// get file size
 //DONE
 
 int writeCard(card* reference);		// write card to file and return error or 0
+//DONE
 
 int putTask(card *reference);		// get card reference and put it in memory
 //DONE
 
-int openTask(card *reference);		// move task from TODO to DOING
-					// get and set author, get and set due date
+int openTask(long int id);		// move task from TODO to DOING
+//DONE					// get and set author, get and set due date
+//
+	char* getAuthor(void);
+	//DONE				// reads author from stdin
 
-int closeTask(card *reference);		// move task from DOING to DONE
+	long int writeAuthor(char* newAuthor);
+	//DONE				// write author to file and return (long int) position
+
+	time_t getDueDate();
+	//DONE				// get due date from stdin
+
+	int isBissext(int year);
+	//DONE				// determine if a year is bissext
+
+	struct tm* makeStructTM(int year, int month, int day);
+	//DONE				// make a tm structure out of a int date
+//
+
+int closeTask(long int id);		// move task from DOING to DONE
 					// set conclusion date with time.h
 
-int reopenTask(card *reference);	// move task from DONE to TODO
+int reopenTask(long int id);	// move task from DONE to TODO
 					// get and reset priority
 
-int changeAuthor(card *reference);	// change Author
+int changeAuthor(long int id);	// change Author
 
 int fullView(void);			// view from the organized linked list (
 					//					TODO by priority then creation,
@@ -60,9 +83,7 @@ int fullView(void);			// view from the organized linked list (
 
 int viewByCreation(void);		// view all by creation date
 
-int viewByAuthor(long int author);	// view all by Author (only DOING and DONE)
-
-long int getAuthor(void);		// read Author from input
+int viewByAuthor();	// view all by Author (only DOING and DONE)
 
 void putError(int err);			// print error message to stderr
 // NOT DONE (temporarily defined)
