@@ -165,20 +165,27 @@ long int writeText(char* text){		// ! non-portable
 
 char* getText(){	// ! non-portable
 		// get text from input
-	printf("\nPlease enter the description for the task:\n\
-		( ! End text with Ctrl + G then Enter)\n\n");
-	const int size = 128; 		// size as 128 bytes block
+	printf("\nPlease enter the description for the task:\n"
+		"( ! End text with Ctrl + G then Enter)\n\n");
+	char *text = readInput(0x07);
+	if( getchar() != '\n') putError(0);	// read \n after ^G
+	return text;
+}
+
+char* readInput(const char control){
+							// reads text from input
+
+	const int size = 64; 		// size as 128 bytes block
 	int cur_size;
-	char* text = (char*) malloc( (cur_size = size*sizeof(char)) );
+	char* text = (char*) malloc( (cur_size = size)*sizeof(char) );
 	if(text == NULL) return NULL;
 
 	int i=0, c;
-	while( (c=getchar()) != 0x07){
-		if(i > cur_size-1)
-			text = (char*) realloc(text, cur_size + size);
+	while( (c=getchar()) != control){
+		if(i >= cur_size)
+			text = (char*) realloc(text, (cur_size*=2) *sizeof(char));	// doubles buffer size whenever nedded
 		text[i++] = c;
 	}
-	if( getchar() != '\n') putError(0);
 	text[i++] = '\0';
 	text = (char*) realloc(text, i); 	// trim
 
@@ -265,7 +272,8 @@ int openTask(long int id){
 char* getAuthor(){
 			// reads author from stdin
 
-	return NULL;
+	printf("\nPlease enter the author for the task:\n");
+	return readInput('\n');
 }
 
 long int writeAuthor(char* newAuthor){

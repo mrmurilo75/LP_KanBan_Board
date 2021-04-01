@@ -32,6 +32,6 @@ int putIn(byte list, cardNode* now, cardNode* prev, cardNode* next);
 cardNode* getCard(long int id);		// get card reference from id (text position in file)
 //DONE
 
-int updateInListing(long int id, newC)
+int updateInListing(long int id, card *newC);	// update an card from id, using non-negative values from newC
 
 #endif  // LIST_HEADER_INCLUDED

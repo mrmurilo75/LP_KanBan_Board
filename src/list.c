@@ -154,6 +154,7 @@ cardNode* getCard(long int id){
 int updateInListing(long int id, card *newC){
 						// update an card from id, using non-negative values from newC
 
+	return -1;
 
 }
 
