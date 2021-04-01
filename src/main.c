@@ -380,6 +380,15 @@ int closeTask(long int id){
 	return err;
 }
 
+int reopenTask(long int id){
+				// move task from DONE to TODO
+				// get and reset priority
+	card* newC = newCard();
+
+	newC->column = DONE;
+	if( ( newC->priority = getPriority() ) < 0) return NULL;
+
+}
 int viewByAuthor() {
 	cardNode* now = byAuthor;
 
