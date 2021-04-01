@@ -69,6 +69,7 @@ int initialize(void){
 
 	return	0;
 }
+
 int get_option(void){
 	int opt=9;
 	while(opt){
@@ -246,34 +247,6 @@ long int fgetSize(FILE *file){
 	return res;
 }
 
-int viewByAuthor() {
-	cardNode* now = byAuthor;
-
-
-	while (now->value != NULL) {
-		printf("Autor do card: ");
-		fseek(fauthor,now->value->author, SEEK_SET);
-		char c;
-		while((c=fgetc(fauthor)) != '\0') {
-			putchar(c);	
-		}
-		printf("\n");
-		printf("Descrição da tarefa: ");
-		fseek(ftext,now->value->text, SEEK_SET);
-		c = '.';
-		while((c=fgetc(ftext)) != '\0') {
-			putchar(c);	
-		}
-		printf ("Prioridade da Tarefa = %c\n", now->value->priority);
-		printf ("Tarefa da Coluna: %c\n", now->value->column);
-		printf ("Data de Criação: %s", ctime (&now->value->creation));
-		printf ("Prazo Maximo de Conclusao: %s", ctime (&now->value->due));
-		now = now->nextByAuthor;
-	}
-	
-	return 0;
-}
-
 int openTask(long int id){
 				// move task from TODO to DOING
 				// get and set author, get and set due date
@@ -305,6 +278,34 @@ long int getDueDate(){
 			// get due date from stdin
 
 	return -1;
+}
+
+int viewByAuthor() {
+	cardNode* now = byAuthor;
+
+
+	while (now->value != NULL) {
+		printf("Autor do card: ");
+		fseek(fauthor,now->value->author, SEEK_SET);
+		char c;
+		while((c=fgetc(fauthor)) != '\0') {
+			putchar(c);	
+		}
+		printf("\n");
+		printf("Descrição da tarefa: ");
+		fseek(ftext,now->value->text, SEEK_SET);
+		c = '.';
+		while((c=fgetc(ftext)) != '\0') {
+			putchar(c);	
+		}
+		printf ("Prioridade da Tarefa = %c\n", now->value->priority);
+		printf ("Tarefa da Coluna: %c\n", now->value->column);
+		printf ("Data de Criação: %s", ctime (&now->value->creation));
+		printf ("Prazo Maximo de Conclusao: %s", ctime (&now->value->due));
+		now = now->nextByAuthor;
+	}
+	
+	return 0;
 }
 
 void putError(int err){
