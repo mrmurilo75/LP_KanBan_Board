@@ -16,13 +16,13 @@ int main(int argc, char* argv[]){
 				err = openTask((getCardId()));
 				break;
 /*			case 3:
-				err = changeAuthor(getCardId()));
+				err = changeAuthor(getCardId());
 				break;
-			case 4:
-				err = closeTask(getCardId()));
+*/			case 4:
+				err = closeTask(getCardId());
 				break;
-			case 5:
-				err = reopenTask(getCardId()));
+/*			case 5:
+				err = reopenTask(getCardId());
 				break;
 			case 6:
 				err = fullView();
@@ -365,6 +365,19 @@ struct tm* makeStructTM(int year, int month, int day){
 
 	return date;
 
+}
+
+int closeTask(long int id){
+				// move task from DOING to DONE
+				// set conclusion date with time.h
+	card* newC = newCard();
+
+	newC->column = DONE;
+	if( time(&(newC->conclusion)) < 0 ) return -1;
+
+	int err = updateInListing(id, newC);
+
+	return err;
 }
 
 int viewByAuthor() {

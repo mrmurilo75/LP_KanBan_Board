@@ -69,7 +69,7 @@ int openTask(long int id);		// move task from TODO to DOING
 //
 
 int closeTask(long int id);		// move task from DOING to DONE
-					// set conclusion date with time.h
+//DONE					// set conclusion date with time.h
 
 int reopenTask(long int id);	// move task from DONE to TODO
 					// get and reset priority
