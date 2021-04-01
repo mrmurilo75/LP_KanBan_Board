@@ -151,10 +151,48 @@ cardNode* getCard(long int id){
 	return NULL;
 }
 
-int updateInListing(long int id, card *newC){
+int updateInListing(long int id, card* newC){
 						// update an card from id, using non-negative values from newC
 
-	return -1;
+	if(id < 0 || newC == NULL) return -1;
+
+	int err = 0;
+
+	cardNode* toUpdate = NULL;
+	CardList prevByAll;
+	for(CardList now = byAll, prev = NULL; now->value != NULL; prev = now, now = now->nextByAll){
+		if(now->value->text == id){
+			toUpdate = now;
+			prevByAll = prev;
+			prev->nextByAll = now->nextByAll;
+		}
+	}
+	if(newC->author >= 0){
+		toUpdate->value->author = newC->author;
+
+		for(CardList now = byAuthor, prev = NULL; now->value != NULL; prev = now, now = now->nextByAuthor){
+			if(now->value->text == id)
+				prev->nextByAuthor = now->nextByAuthor;
+		}
+		err = putByAuthor(toUpdate, byAuthor, NULL);
+	}
+	if(newC->due >= 0)
+		toUpdate->value->due = newC->due;
+	if(newC->conclusion >= 0)
+		toUpdate->value->conclusion = newC->conclusion;
+	if(newC->priority >= 0)
+		toUpdate->value->priority = newC->priority;
+	if(newC->column >= 0){
+		if(toUpdate->value->column < newC->column){
+			toUpdate->value->column = newC->column;
+			err = ( putByAll(toUpdate, byAll, NULL) || err );
+		} else{
+			toUpdate->value->column = newC->column;
+			err = ( putByAll(toUpdate, toUpdate->nextByAll, prevByAll) || err );
+		}
+	}
+
+	return err;
 
 }
 
