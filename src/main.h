@@ -50,22 +50,22 @@ int putTask(card *reference);		// get card reference and put it in memory
 //DONE
 
 int openTask(long int id);		// move task from TODO to DOING
-//					// get and set author, get and set due date
+//DONE					// get and set author, get and set due date
 //
 	char* getAuthor(void);
-					// reads author from stdin
+	//DONE				// reads author from stdin
 
 	long int writeAuthor(char* newAuthor);
-					// write author to file and return (long int) position
+	//DONE				// write author to file and return (long int) position
 
 	time_t getDueDate();
-					// get due date from stdin
+	//DONE				// get due date from stdin
 
 	int isBissext(int year);
-					// determine if a year is bissext
+	//DONE				// determine if a year is bissext
 
 	struct tm* makeStructTM(int year, int month, int day);
-					// make a tm structure out of a int date
+	//DONE				// make a tm structure out of a int date
 //
 
 int closeTask(long int id);		// move task from DOING to DONE

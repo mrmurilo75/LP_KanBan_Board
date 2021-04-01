@@ -307,6 +307,10 @@ time_t getDueDate(){
 		if(isBissext(year) && month == 2 && day == 29)
 			return mktime( makeStructTM(year, month, day) );
 
+		if(year < 1900){
+			printf("Invalid input ! Try again (put all zeros to cancel [0000 00 00] )\n");
+			continue;
+		}
 		if(month < 1 || month > 12){
 			printf("Invalid input ! Try again (put all zeros to cancel [0000 00 00] )\n");
 			continue;
@@ -333,6 +337,33 @@ time_t getDueDate(){
 	}
 
 	return -1;
+
+}
+
+int isBissext(int year){
+				// determine if a year is bissext
+
+	if( !(year%4) && (year%100 || !(year%400)) )
+		return 1;
+
+	return 0;
+}
+
+struct tm* makeStructTM(int year, int month, int day){
+								// make a tm structure out of a int date
+
+	struct tm* date = (struct tm*) malloc(sizeof(struct tm));
+	if(date == NULL) return NULL;
+
+	date->tm_min = date->tm_sec = 59;
+	date->tm_hour = 22;		// to fit if daylight saving time should be accounted
+	date->tm_mday = day;
+	date->tm_mon = month - 1;
+	date->tm_year = year - 1900;
+	date->tm_wday = date->tm_yday = 0;
+	date->tm_isdst = -1;		// DST is not considered
+
+	return date;
 
 }
 
