@@ -14,10 +14,10 @@ int main(int argc, char* argv[]){
 */			case 1:
 				err = putTask(getInsertion());
 				break;
-/*			case 2:
+			case 2:
 				err = openTask((getCardId()));
 				break;
-			case 3:
+/*			case 3:
 				err = changeAuthor(getCardId()));
 				break;
 			case 4:
@@ -28,8 +28,8 @@ int main(int argc, char* argv[]){
 				break;
 			case 6:
 				err = fullView();
-				break;*/
-			case 7:
+				break;
+*/			case 7:
 				err = viewByAuthor();
 				break;
 			/*case 8:
@@ -141,24 +141,24 @@ card* getInsertion(){
 	
 		// fill information that matters
 	newC->column = TODO;
-	if( ( newC->text = writeText(getText()) ) < 0) return NULL;
+	if( ( newC->text = writeText(ftext, "text.txt", getText()) ) < 0) return NULL;
 	if( ( newC->priority = getPriority() ) < 0) return NULL;
 	if( ( time( &(newC->creation)) ) < 0) return NULL;
 
 	return newC;
 }
 
-long int writeText(char* text){		// ! non-portable
-			// write text to file and return (long) position pointer
+long int writeText(FILE* file, const char* fname, const char* text){		// ! non-portable
+							// write text to file and return (long) position pointer
 
-	if(ftext == NULL)
-		if( (ftext = fopen("text.txt", "w+")) == NULL) return -1L;
+	if(file == NULL)
+		if( (file = fopen(fname, "w+")) == NULL) return -1L;
 
-	fseek(ftext, 0, SEEK_END);
-	long int pos = ftell(ftext);
+	fseek(file, 0, SEEK_END);
+	long int pos = ftell(file);
 
-	if( fputs(text, ftext) < 0) return -1;		// writes to file whats in text argument (without null character)
-	if( fputc('\0', ftext) < 0) return -1;		// writes terminating null character
+	if( fputs(text, file) < 0) return -1;		// writes to file whats in text argument (without null character)
+	if( fputc('\0', file) < 0) return -1;		// writes terminating null character
 
 	return pos;
 }
@@ -261,7 +261,7 @@ int openTask(long int id){
 	card* newC = newCard();
 
 	newC->column = DOING;
-	newC->author = writeAuthor(getAuthor());
+	newC->author = writeText(fauthor, "author.txt", getAuthor());
 	newC->due = getDueDate();
 
 	int err = updateInListing(id, newC);
@@ -274,12 +274,6 @@ char* getAuthor(){
 
 	printf("\nPlease enter the author for the task:\n");
 	return readInput('\n');
-}
-
-long int writeAuthor(char* newAuthor){
-					// write author to file and return (long int) position
-
-	return -1;
 }
 
 long int getDueDate(){

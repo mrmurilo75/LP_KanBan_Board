@@ -17,7 +17,7 @@ int get_option(void); 			// get input option from user (1. insert,  2. open task
 
 card* getInsertion();			// get text for description, priority and creation date
 //					// get creation date using time.h
-	long writeText(char* text);
+	long writeText(FILE* file, const char* fname, const char* text);
 	//DONE				// write text to file and return (long) position pointer
 
 	char* getText();
