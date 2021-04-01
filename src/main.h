@@ -1,5 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <ctype.h>
 #include "card.h"
 
 #define TODO 1
@@ -55,8 +58,14 @@ int openTask(long int id);		// move task from TODO to DOING
 	long int writeAuthor(char* newAuthor);
 					// write author to file and return (long int) position
 
-	long int getDueDate();
+	time_t getDueDate();
 					// get due date from stdin
+
+	int isBissext(int year);
+					// determine if a year is bissext
+
+	struct tm* makeStructTM(int year, int month, int day);
+					// make a tm structure out of a int date
 //
 
 int closeTask(long int id);		// move task from DOING to DONE

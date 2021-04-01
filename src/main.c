@@ -1,5 +1,3 @@
-#include <string.h>
-#include <stdio.h>
 #include "main.h"
 #include "card.c"
 #include "list.c"
@@ -276,10 +274,66 @@ char* getAuthor(){
 	return readInput('\n');
 }
 
-long int getDueDate(){
+time_t getDueDate(){
 			// get due date from stdin
 
+	for(;;){
+		printf("Please enter a due date:\n"
+			"(in the YYYY MM DD format)\n");
+
+		char* date = "YYYYMMDD";
+		int c;
+		for(int i=0; i<8;){
+			while( !isdigit( (c =getchar()) ) );	// read any non-digits bf input
+			date[i]=c;
+		}
+
+		printf("Confirm date %d%d%d%d %d%d %d%d ? (y/n) ", date[0], date[1], date[2], date[3], date[4], date[5], date[6], date[7]);
+
+		c =getchar();
+		while( getchar() != '\n');
+		if(c!='y' && c!='Y'){
+			printf("Try again (put all zeros to cancel [0000 00 00] )\n");
+			continue;
+		}
+		
+		int dateValue = atoi(date);
+		
+		if(dateValue == 0)
+			return -1;
+
+		int day = dateValue%100, month = dateValue/100%10000, year = dateValue/10000;
+		
+		if(isBissext(year) && month == 2 && day == 29)
+			return mktime( makeStructTM(year, month, day) );
+
+		if(month < 1 || month > 12){
+			printf("Invalid input ! Try again (put all zeros to cancel [0000 00 00] )\n");
+			continue;
+		}
+
+		int last = 30;
+		switch(month){
+			case 1:
+			case 3:
+			case 5:
+			case 10:
+			case 12:
+				last=31;
+				break;
+			case 2:
+				last=28;
+		}
+		if(day < 1 || day > last){
+			printf("Invalid input ! Try again (put all zeros to cancel [0000 00 00] )\n");
+			continue;
+		}
+
+		return mktime( makeStructTM(year, month, day) );
+	}
+
 	return -1;
+
 }
 
 int viewByAuthor() {
