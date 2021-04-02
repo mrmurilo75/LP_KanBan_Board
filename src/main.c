@@ -421,6 +421,20 @@ int reopenTask(long int id){
 	return err;
 }
 
+int changeAuthor(long int id){
+				// change Author in card given by id
+	card* newC = newCard();
+
+	newC->author = writeText(fauthor, "author.txt", getAuthor());
+
+	int err = updateInListing(id, newC);
+	if(err) return err;
+
+	err = updateFCards(id, newC);
+
+	return err;
+}
+
 int viewByAuthor() {
 	cardNode* now = byAuthor;
 

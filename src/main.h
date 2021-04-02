@@ -77,7 +77,8 @@ int closeTask(long int id);		// move task from DOING to DONE
 int reopenTask(long int id);		// move task from DONE to TODO
 //DONE					// get and reset priority
 
-int changeAuthor(long int id);		// change Author
+int changeAuthor(long int id);		// change Author in card given by id
+//DONE
 
 int fullView(void);			// view from the organized linked list (
 					//					TODO by priority then creation,
