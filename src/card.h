@@ -14,7 +14,7 @@ typedef char byte;
 #define CARD_H_INCLUDED
 
 typedef struct {
-	long int text, author; //for use with ftell/fseek and for easier sorting
+	long int id, text, author; //for use with ftell/fseek and for easier sorting
 	time_t creation, due, conclusion;
 	byte priority;
 	byte column;

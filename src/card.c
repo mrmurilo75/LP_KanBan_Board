@@ -7,7 +7,7 @@ card* newCard(void){
 	
 	card* newC = (card*) malloc(sizeof(card));
 
-	newC->text = newC->author  = newC->creation = newC->due = newC->conclusion  = newC->priority  = newC->column = -1;
+	newC->id = newC->text = newC->author  = newC->creation = newC->due = newC->conclusion  = newC->priority  = newC->column = -1;
 
 	return newC;
 
