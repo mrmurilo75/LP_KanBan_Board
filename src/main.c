@@ -265,6 +265,9 @@ int openTask(long int id){
 	newC->due = getDueDate();
 
 	int err = updateInListing(id, newC);
+	if(err) return err;
+
+	err = updateFCards(id, newC);
 
 	return err;
 }
@@ -366,6 +369,23 @@ struct tm* makeStructTM(int year, int month, int day){
 	date->tm_isdst = -1;		// DST is not considered
 
 	return date;
+
+}
+
+int updateFCards(long int id, card* newC){
+						// update file fcards.bin with update card information
+	int err = fseek(fcards, id, SEEK_SET);
+	if(err) return -1;
+
+	card *oldC = freadCard(fcards);
+
+	newC = updateCard(newC, oldC);
+
+	err = fseek(fcards, id, SEEK_SET);
+	if(err) return -1;
+	err = fwrite(newC, sizeof(card), 1, fcards);
+
+	return err;
 
 }
 

@@ -66,6 +66,9 @@ int openTask(long int id);		// move task from TODO to DOING
 
 	struct tm* makeStructTM(int year, int month, int day);
 	//DONE				// make a tm structure out of a int date
+
+	int updateFCards(long int id, card* newC);
+	//DONE				// update file fcards.bin with update card information
 //
 
 int closeTask(long int id);		// move task from DOING to DONE
