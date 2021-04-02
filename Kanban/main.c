@@ -16,13 +16,13 @@ int main(int argc, char* argv[]){
 				err = openTask((getCardId()));
 				break;
 /*			case 3:
-				err = changeAuthor(getCardId()));
+				err = changeAuthor(getCardId());
 				break;
-			case 4:
-				err = closeTask(getCardId()));
+*/			case 4:
+				err = closeTask(getCardId());
 				break;
-			case 5:
-				err = reopenTask(getCardId()));
+/*			case 5:
+				err = reopenTask(getCardId());
 				break;
 			case 6:
 				err = fullView();
@@ -124,6 +124,8 @@ int writeCard(card* reference){		// ! non-portable
 		if( (fcards = fopen("cards.bin", "wb+")) == NULL) return -1;
 
 	fseek(fcards, 0, SEEK_END);
+
+	reference->id = ftell(fcards);
 
 	if( fwrite(reference, sizeof(card), 1, fcards) != 1) return -1;
 
@@ -263,6 +265,9 @@ int openTask(long int id){
 	newC->due = getDueDate();
 
 	int err = updateInListing(id, newC);
+	if(err) return err;
+
+	err = updateFCards(id, newC);
 
 	return err;
 }
@@ -365,6 +370,69 @@ struct tm* makeStructTM(int year, int month, int day){
 
 	return date;
 
+}
+
+int updateFCards(long int id, card* newC){
+						// update file fcards.bin with update card information
+	int err = fseek(fcards, id, SEEK_SET);
+	if(err) return -1;
+
+	card *oldC = freadCard(fcards);
+
+	newC = updateCard(newC, oldC);
+
+	err = fseek(fcards, id, SEEK_SET);
+	if(err) return -1;
+	err = fwrite(newC, sizeof(card), 1, fcards);
+
+	return err;
+
+}
+
+int closeTask(long int id){
+				// move task from DOING to DONE
+				// set conclusion date with time.h
+	card* newC = newCard();
+
+	newC->column = DONE;
+	if( time(&(newC->conclusion)) < 0 ) return -1;
+
+	int err = updateInListing(id, newC);
+	if(err) return err;
+
+	err = updateFCards(id, newC);
+
+	return err;
+}
+
+int reopenTask(long int id){
+				// move task from DONE to TODO
+				// get and reset priority
+	card* newC = newCard();
+
+	newC->column = TODO;
+	if( ( newC->priority = getPriority() ) < 0) return -1;
+
+	int err = updateInListing(id, newC);
+	if(err) return err;
+
+	err = updateFCards(id, newC);
+
+	return err;
+}
+
+int changeAuthor(long int id){
+				// change Author in card given by id
+	card* newC = newCard();
+
+	newC->author = writeText(fauthor, "author.txt", getAuthor());
+
+	int err = updateInListing(id, newC);
+	if(err) return err;
+
+	err = updateFCards(id, newC);
+
+	return err;
 }
 
 int viewByAuthor() {

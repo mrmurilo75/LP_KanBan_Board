@@ -144,7 +144,7 @@ cardNode* getCard(long int id){
 	if(id < 0) return NULL;
 
 	for(CardList now = byCreation; now->value != NULL; now = now->nextByCreation){
-		if(now->value->text == id)
+		if(now->value->id == id)
 			return now;
 	}
 
@@ -161,7 +161,7 @@ int updateInListing(long int id, card* newC){
 	cardNode* toUpdate = NULL;
 	CardList prevByAll;
 	for(CardList now = byAll, prev = NULL; now->value != NULL; prev = now, now = now->nextByAll){
-		if(now->value->text == id){
+		if(now->value->id == id){
 			toUpdate = now;
 			prevByAll = prev;
 			prev->nextByAll = now->nextByAll;
@@ -171,7 +171,7 @@ int updateInListing(long int id, card* newC){
 		toUpdate->value->author = newC->author;
 
 		for(CardList now = byAuthor, prev = NULL; now->value != NULL; prev = now, now = now->nextByAuthor){
-			if(now->value->text == id)
+			if(now->value->id == id)
 				prev->nextByAuthor = now->nextByAuthor;
 		}
 		err = putByAuthor(toUpdate, byAuthor, NULL);

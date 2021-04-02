@@ -14,7 +14,7 @@ typedef char byte;
 #define CARD_H_INCLUDED
 
 typedef struct {
-	long int text, author; //for use with ftell/fseek and for easier sorting
+	long int id, text, author; //for use with ftell/fseek and for easier sorting
 	time_t creation, due, conclusion;
 	byte priority;
 	byte column;
@@ -32,8 +32,13 @@ typedef struct card_node{
 } cardNode;
         
 
-card* clearCard(void);		// clear all card fields with NULL or similar
+card* newCard(void);				// clear all card fields with NULL or similar
+//DONE
 
-card* freadCard(FILE* stream);	// malloc space for a card and fill from stream
+card* freadCard(FILE* stream);			// malloc space for a card and fill from stream
+//DONE
+
+card* updateCard(card* newC, card* oldC);	// update any non-negative fields in newC to oldC
+//DONE
 
 #endif	//CARD_H_INCLUDED

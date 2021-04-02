@@ -66,15 +66,19 @@ int openTask(long int id);		// move task from TODO to DOING
 
 	struct tm* makeStructTM(int year, int month, int day);
 	//DONE				// make a tm structure out of a int date
+
+	int updateFCards(long int id, card* newC);
+	//DONE				// update file fcards.bin with update card information
 //
 
 int closeTask(long int id);		// move task from DOING to DONE
-					// set conclusion date with time.h
+//DONE					// set conclusion date with time.h
 
-int reopenTask(long int id);	// move task from DONE to TODO
-					// get and reset priority
+int reopenTask(long int id);		// move task from DONE to TODO
+//DONE					// get and reset priority
 
-int changeAuthor(long int id);	// change Author
+int changeAuthor(long int id);		// change Author in card given by id
+//DONE
 
 int fullView(void);			// view from the organized linked list (
 					//					TODO by priority then creation,
@@ -83,7 +87,7 @@ int fullView(void);			// view from the organized linked list (
 
 int viewByCreation(void);		// view all by creation date
 
-int viewByAuthor();	// view all by Author (only DOING and DONE)
+int viewByAuthor();			// view all by Author (only DOING and DONE)
 
 void putError(int err);			// print error message to stderr
 // NOT DONE (temporarily defined)
