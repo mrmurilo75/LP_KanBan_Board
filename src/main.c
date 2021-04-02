@@ -125,6 +125,8 @@ int writeCard(card* reference){		// ! non-portable
 
 	fseek(fcards, 0, SEEK_END);
 
+	reference->id = ftell(fcards);
+
 	if( fwrite(reference, sizeof(card), 1, fcards) != 1) return -1;
 
 	return 0;
