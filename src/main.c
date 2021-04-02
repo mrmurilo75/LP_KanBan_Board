@@ -398,6 +398,9 @@ int closeTask(long int id){
 	if( time(&(newC->conclusion)) < 0 ) return -1;
 
 	int err = updateInListing(id, newC);
+	if(err) return err;
+
+	err = updateFCards(id, newC);
 
 	return err;
 }
@@ -407,10 +410,17 @@ int reopenTask(long int id){
 				// get and reset priority
 	card* newC = newCard();
 
-	newC->column = DONE;
-	if( ( newC->priority = getPriority() ) < 0) return NULL;
+	newC->column = TODO;
+	if( ( newC->priority = getPriority() ) < 0) return -1;
 
+	int err = updateInListing(id, newC);
+	if(err) return err;
+
+	err = updateFCards(id, newC);
+
+	return err;
 }
+
 int viewByAuthor() {
 	cardNode* now = byAuthor;
 
