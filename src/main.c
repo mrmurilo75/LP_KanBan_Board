@@ -288,15 +288,17 @@ time_t getDueDate(){
 
 		char date[9];
 		char c;
-		for(int i=0; i<8;i++){
+		for(int i=0; i<8; i++){
 			while( !isdigit( (c =getchar()) ) );	// read any non-digits bf input
-			date[i]=c;
+			date[i]=c-'0';
 		}
 		date[8] = '\0';
 
+		while( getchar() !='\n');	// read any non-digits after input
 		printf("Confirm date %d%d%d%d %d%d %d%d ? (y/n) ", date[0], date[1], date[2], date[3], date[4], date[5], date[6], date[7]);
 
 		c =getchar();
+		printf("\n\t%c",c);
 		while( getchar() != '\n');
 		if(c!='y' && c!='Y'){
 			printf("Try again (put all zeros to cancel [0000 00 00] )\n");
@@ -455,7 +457,7 @@ int view(byte by){
 	while (now->value != NULL) {
 		printf("\n------------------------------");
 		printf ("\nID da Tarefa = %ld", now->value->id);
-		printf("\nDescrição da tarefa: ");
+		printf("\nDescrição da tarefa: \n");
 		fseek(ftext,now->value->text, SEEK_SET);
 		char c;
 		while((c=fgetc(ftext)) != '\0') {
@@ -469,7 +471,20 @@ int view(byte by){
 			}
 		}
 		printf ("\nPrioridade da Tarefa = %d", now->value->priority);
-		printf ("\nTarefa da Coluna: %d", now->value->column);
+		printf ("\nColuna da tarefa: ");
+		switch(now->value->column){
+			case TODO:
+				printf("To Do");
+				break;
+			case DOING:
+				printf("Doing");
+				break;
+			case DONE:
+				printf("Done");
+				break;
+			default:
+				return -1;
+		}
 		printf ("\nData de Criação: %s", ctime (&now->value->creation));
 		if(now->value->column != TODO && now->value->due >= 0)
 			printf ("\nPrazo Maximo de Conclusao: %s", ctime (&now->value->due));
