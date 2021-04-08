@@ -6,10 +6,10 @@ int main(int argc, char* argv[]){
 	int err=initialize(), opt;
 	while( (opt=get_option()) && !err){	//opt == 0 to quit
 		switch(opt){
-/*			case 0:
+			case 0:
 				err = quit();
 				break;
-*/			case 1:
+			case 1:
 				err = putTask(getInsertion());
 				break;
 			case 2:
@@ -21,13 +21,13 @@ int main(int argc, char* argv[]){
 */			case 4:
 				err = closeTask(getCardId());
 				break;
-/*			case 5:
+			case 5:
 				err = reopenTask(getCardId());
 				break;
 			case 6:
-				err = fullView();
+				err = viewByAll();
 				break;
-*/			case 7:
+			case 7:
 				err = viewByAuthor();
 				break;
 			case 8:
@@ -76,8 +76,8 @@ int get_option(void){
 			"2 - Mover cartão de 'To Do' para 'Doing'\n"
 //			"3 - Alterar pessoas responsável\n"
 			"4 - Fechar tarefa\n"
-//			"5 - Reabrir tarefa\n"
-//			"6 - Visualizar o quadro\n"
+			"5 - Reabrir tarefa\n"
+			"6 - Visualizar o quadro\n"
 			"7 - Visualizar tarefas de uma pessoa\n"
 			"8 - Visualizar tarefas por ordem de criação\n"
 			"0 - Sair\n"
@@ -454,22 +454,25 @@ int view(byte by){
 
 	while (now->value != NULL) {
 		printf("\n------------------------------");
-		printf ("\nID da Tarefa = %ld", byCreation->value->id);
+		printf ("\nID da Tarefa = %ld", now->value->id);
 		printf("\nDescrição da tarefa: ");
-		fseek(ftext,byCreation->value->text, SEEK_SET);
+		fseek(ftext,now->value->text, SEEK_SET);
 		char c;
 		while((c=fgetc(ftext)) != '\0') {
 			putchar(c);
 		}
-		printf("\nAutor da tarefa: ");
-		fseek(fauthor,byCreation->value->author, SEEK_SET);
-		while((c=fgetc(fauthor)) != '\0') {
-			putchar(c);
+		if(now->value->column != TODO && now->value->author >= 0){
+			printf("\nAutor da tarefa: ");
+			fseek(fauthor, now->value->author, SEEK_SET);
+			while((c=fgetc(fauthor)) != '\0') {
+				putchar(c);
+			}
 		}
-		printf ("\nPrioridade da Tarefa = %d", byCreation->value->priority);
-		printf ("\nTarefa da Coluna: %d", byCreation->value->column);
-		printf ("\nData de Criação: %s", ctime (&byCreation->value->creation));
-		printf ("\nPrazo Maximo de Conclusao: %s", ctime (&byCreation->value->due));
+		printf ("\nPrioridade da Tarefa = %d", now->value->priority);
+		printf ("\nTarefa da Coluna: %d", now->value->column);
+		printf ("\nData de Criação: %s", ctime (&now->value->creation));
+		if(now->value->column != TODO && now->value->due >= 0)
+			printf ("\nPrazo Maximo de Conclusao: %s", ctime (&now->value->due));
 		printf ("\n");
 
 		switch(by){
