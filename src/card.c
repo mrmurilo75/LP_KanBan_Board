@@ -24,24 +24,23 @@ card* freadCard(FILE * stream){
 }
 
 card* updateCard(card* newC, card* oldC){
-	card* updated = newCard();
 
 	if(newC->text >= 0)
-		updated->text = newC->text;
+		oldC->text = newC->text;
 	if(newC->author >= 0)
-		updated->author = newC->author;
+		oldC->author = newC->author;
 	if(newC->creation >= 0)
-		updated->creation = newC->creation;
+		oldC->creation = newC->creation;
 	if(newC->due >= 0)
-		updated->due = newC->due;
+		oldC->due = newC->due;
 	if(newC->conclusion >= 0)
-		updated->conclusion = newC->conclusion;
+		oldC->conclusion = newC->conclusion;
 	if(newC->priority >= 0)
-		updated->priority = newC->priority;
+		oldC->priority = newC->priority;
 	if(newC->column >= 0)
-		updated->column = newC->column;
+		oldC->column = newC->column;
 
-	return updated;
+	return oldC;
 }
 
 #endif 		// CARD_C_INCLUDED
