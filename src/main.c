@@ -286,12 +286,13 @@ time_t getDueDate(){
 		printf("Please enter a due date:\n"
 			"(in the YYYY MM DD format)\n");
 
-		char* date = "YYYYMMDD";
-		int c;
-		for(int i=0; i<8;){
+		char date[9];
+		char c;
+		for(int i=0; i<8;i++){
 			while( !isdigit( (c =getchar()) ) );	// read any non-digits bf input
 			date[i]=c;
 		}
+		date[8] = '\0';
 
 		printf("Confirm date %d%d%d%d %d%d %d%d ? (y/n) ", date[0], date[1], date[2], date[3], date[4], date[5], date[6], date[7]);
 
@@ -435,18 +436,46 @@ int changeAuthor(long int id){
 	return err;
 }
 
+int viewByCreation(){
+	char c;
+	cardNode* now = byCreation;
+	while (now->value != NULL) {
+		printf("------------------------------\n");
+		printf("Data de criação %s: ", ctime (&byCreation->value->creation));
+		printf ("\nID da Tarefa = %ld\n", byCreation->value->id);
+		printf("\nDescrição da tarefa: ");
+		fseek(ftext,byCreation->value->text, SEEK_SET);
+		c = '.';
+		while((c=fgetc(ftext)) != '\0') {
+			putchar(c);
+			}
+		printf("\nAutor do card: ");
+		fseek(fauthor,byCreation->value->author, SEEK_SET);
+		char c;
+		while((c=fgetc(fauthor)) != '\0') {
+			putchar(c);
+		}
+		printf ("\nPrioridade da Tarefa = %d\n", byCreation->value->priority);
+		printf ("Tarefa da Coluna: %d\n", byCreation->value->column);
+//		printf ("Data de Criação: %s", ctime (&byCreation->value->creation));
+		printf ("Prazo Maximo de Conclusao: %s", ctime (&byCreation->value->due));
+		now = now->nextByCreation;
+	}
+	return 0;
+}
+
 int viewByAuthor() {
 	cardNode* now = byAuthor;
 
-
 	while (now->value != NULL) {
+		printf("------------------------------\n");
 		printf("Autor do card: ");
 		fseek(fauthor,now->value->author, SEEK_SET);
 		char c;
 		while((c=fgetc(fauthor)) != '\0') {
 			putchar(c);	
 		}
-		printf("\n");
+		printf ("\nID da Tarefa = %ld\n", byCreation->value->id);
 		printf("Descrição da tarefa: ");
 		fseek(ftext,now->value->text, SEEK_SET);
 		c = '.';
