@@ -119,6 +119,7 @@ int putTask(card *reference){
 
 int writeCard(card* reference){		// ! non-portable
 				// write card to file and return error or 0
+	printf("Writing card to persistency...\n");
 
 	if(fcards == NULL)
 		if( (fcards = fopen("cards.bin", "wb+")) == NULL) return -1;
@@ -234,7 +235,7 @@ long int getCardId(){
 
 	printf("\nPlease enter the id for the task:\n"
 		"(an invalid value returns to main menu)\n");
-	long int maxValue = fgetSize(ftext);
+	long int maxValue = fgetSize(fcards);
 	int cur = getPositiveDecimal();
 	if(cur < maxValue)		// maxValue is supposed to be '\0'
 		return cur;
@@ -290,12 +291,12 @@ time_t getDueDate(){
 		char c;
 		for(int i=0; i<8; i++){
 			while( !isdigit( (c =getchar()) ) );	// read any non-digits bf input
-			date[i]=c-'0';
+			date[i]=c;
 		}
 		date[8] = '\0';
 
 		while( getchar() !='\n');	// read any non-digits after input
-		printf("Confirm date %d%d%d%d %d%d %d%d ? (y/n) ", date[0], date[1], date[2], date[3], date[4], date[5], date[6], date[7]);
+		printf("Confirm date %c%c%c%c %c%c %c%c ? (y/n) ", date[0], date[1], date[2], date[3], date[4], date[5], date[6], date[7]);
 
 		c =getchar();
 		printf("\n\t%c",c);
@@ -316,11 +317,11 @@ time_t getDueDate(){
 			return mktime( makeStructTM(year, month, day) );
 
 		if(year < 1900){
-			printf("Invalid input ! Try again (put all zeros to cancel [0000 00 00] )\n");
+			printf("Invalid year ! Try again (put all zeros to cancel [0000 00 00] )\n");
 			continue;
 		}
 		if(month < 1 || month > 12){
-			printf("Invalid input ! Try again (put all zeros to cancel [0000 00 00] )\n");
+			printf("Invalid month ! Try again (put all zeros to cancel [0000 00 00] )\n");
 			continue;
 		}
 
@@ -337,7 +338,7 @@ time_t getDueDate(){
 				last=28;
 		}
 		if(day < 1 || day > last){
-			printf("Invalid input ! Try again (put all zeros to cancel [0000 00 00] )\n");
+			printf("Invalid day ! Try again (put all zeros to cancel [0000 00 00] )\n");
 			continue;
 		}
 
