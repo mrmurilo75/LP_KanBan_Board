@@ -30,10 +30,10 @@ int main(int argc, char* argv[]){
 */			case 7:
 				err = viewByAuthor();
 				break;
-			/*case 8:
+			case 8:
 				err = viewByCreation();
 				break;
-*/			default:
+			default:
 				(err)? putError(err) : 0;
 		}
 	}
@@ -74,10 +74,10 @@ int get_option(void){
 		printf(	"**************MENU**************\n"
 			"1 - Inserir tarefa em 'To Do'\n"
 			"2 - Mover cartão de 'To Do' para 'Doing'\n"
-			"3 - Alterar pessoas responsável\n"
+//			"3 - Alterar pessoas responsável\n"
 			"4 - Fechar tarefa\n"
-			"5 - Reabrir tarefa\n"
-			"6 - Visualizar o quadro\n"
+//			"5 - Reabrir tarefa\n"
+//			"6 - Visualizar o quadro\n"
 			"7 - Visualizar tarefas de uma pessoa\n"
 			"8 - Visualizar tarefas por ordem de criação\n"
 			"0 - Sair\n"
@@ -436,60 +436,69 @@ int changeAuthor(long int id){
 	return err;
 }
 
-int viewByCreation(){
-	char c;
-	cardNode* now = byCreation;
+int view(byte by){
+	cardNode* now;
+	switch(by){
+		case BYALL:
+			now = byAll;
+			break;
+		case BYAUTHOR:
+			now = byAuthor;
+			break;
+		case BYCREATION:
+			now = byCreation;
+			break;
+		default:
+			return -1;
+	}
+
 	while (now->value != NULL) {
-		printf("------------------------------\n");
-		printf("Data de criação %s: ", ctime (&byCreation->value->creation));
-		printf ("\nID da Tarefa = %ld\n", byCreation->value->id);
+		printf("\n------------------------------");
+		printf ("\nID da Tarefa = %ld", byCreation->value->id);
 		printf("\nDescrição da tarefa: ");
 		fseek(ftext,byCreation->value->text, SEEK_SET);
-		c = '.';
+		char c;
 		while((c=fgetc(ftext)) != '\0') {
 			putchar(c);
-			}
-		printf("\nAutor do card: ");
+		}
+		printf("\nAutor da tarefa: ");
 		fseek(fauthor,byCreation->value->author, SEEK_SET);
-		char c;
 		while((c=fgetc(fauthor)) != '\0') {
 			putchar(c);
 		}
-		printf ("\nPrioridade da Tarefa = %d\n", byCreation->value->priority);
-		printf ("Tarefa da Coluna: %d\n", byCreation->value->column);
-//		printf ("Data de Criação: %s", ctime (&byCreation->value->creation));
-		printf ("Prazo Maximo de Conclusao: %s", ctime (&byCreation->value->due));
-		now = now->nextByCreation;
+		printf ("\nPrioridade da Tarefa = %d", byCreation->value->priority);
+		printf ("\nTarefa da Coluna: %d", byCreation->value->column);
+		printf ("\nData de Criação: %s", ctime (&byCreation->value->creation));
+		printf ("\nPrazo Maximo de Conclusao: %s", ctime (&byCreation->value->due));
+		printf ("\n");
+
+		switch(by){
+			case BYALL:
+				now = now->nextByAll;
+				break;
+			case BYAUTHOR:
+				now = now->nextByAuthor;
+				break;
+			case BYCREATION:
+				now = now->nextByCreation;
+				break;
+			default:
+				return -1;
+		}
 	}
 	return 0;
 }
 
-int viewByAuthor() {
-	cardNode* now = byAuthor;
+int viewByAll(){
+	return view(BYALL);
+}
 
-	while (now->value != NULL) {
-		printf("------------------------------\n");
-		printf("Autor do card: ");
-		fseek(fauthor,now->value->author, SEEK_SET);
-		char c;
-		while((c=fgetc(fauthor)) != '\0') {
-			putchar(c);	
-		}
-		printf ("\nID da Tarefa = %ld\n", byCreation->value->id);
-		printf("Descrição da tarefa: ");
-		fseek(ftext,now->value->text, SEEK_SET);
-		c = '.';
-		while((c=fgetc(ftext)) != '\0') {
-			putchar(c);	
-		}
-		printf ("Prioridade da Tarefa = %c\n", now->value->priority);
-		printf ("Tarefa da Coluna: %c\n", now->value->column);
-		printf ("Data de Criação: %s", ctime (&now->value->creation));
-		printf ("Prazo Maximo de Conclusao: %s", ctime (&now->value->due));
-		now = now->nextByAuthor;
-	}
-	
-	return 0;
+int viewByAuthor() {
+	return view(BYAUTHOR);
+}
+
+int viewByCreation(){
+	return view(BYCREATION);
 }
 
 void putError(int err){

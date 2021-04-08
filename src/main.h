@@ -80,14 +80,16 @@ int reopenTask(long int id);		// move task from DONE to TODO
 int changeAuthor(long int id);		// change Author in card given by id
 //DONE
 
-int fullView(void);			// view from the organized linked list (
+int viewByAll(void);			// view from the organized linked list (
 					//					TODO by priority then creation,
 					//					DOING by author,
 					//					DONE by conclusion )
 
 int viewByCreation(void);		// view all by creation date
 
-int viewByAuthor();			// view all by Author (only DOING and DONE)
+int viewByAuthor(void);			// view all by Author (only DOING and DONE)
+
+int view(byte by);			// iterates through CardList's and print card in the order passed as 'by'
 
 void putError(int err);			// print error message to stderr
 // NOT DONE (temporarily defined)
