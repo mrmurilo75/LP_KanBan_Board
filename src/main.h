@@ -27,7 +27,10 @@ card* getInsertion();			// get text for description, priority and creation date
 	//DONE				// get text from input
 
 	char* readInput(const char control);
-	//DONE				// read text from input until a control character
+	//DONE				// read text from stdin until a control character
+
+	char* readStream(FILE* stream, const char control);
+	//DONE				// read text from stream until a control character
 
 	byte getPriority();
 	//DONE				// get priority from input

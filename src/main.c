@@ -15,10 +15,10 @@ int main(int argc, char* argv[]){
 			case 2:
 				err = openTask((getCardId()));
 				break;
-/*			case 3:
+			case 3:
 				err = changeAuthor(getCardId());
 				break;
-*/			case 4:
+			case 4:
 				err = closeTask(getCardId());
 				break;
 			case 5:
@@ -169,20 +169,28 @@ char* getText(){	// ! non-portable
 	printf("\nPlease enter the description for the task:\n"
 		"( ! End text with Ctrl + G then Enter)\n\n");
 	char *text = readInput(0x07);
-	if( getchar() != '\n') putError(0);	// read \n after ^G
+	if( getchar() != '\n'){		// read \n after ^G
+		putError(0);
+		return NULL;
+	}
 	return text;
 }
 
 char* readInput(const char control){
+							// reads text from stdin
+	return readStream(stdin, control);
+}
+
+char* readStream(FILE* stream, const char control){
 							// reads text from input
 
-	const int size = 64; 		// size as 128 bytes block
+	const int size = 64; 		// size as 64 bytes block
 	int cur_size;
 	char* text = (char*) malloc( (cur_size = size)*sizeof(char) );
 	if(text == NULL) return NULL;
 
 	int i=0, c;
-	while( (c=getchar()) != control){
+	while( (c=fgetc(stream)) != control){
 		if(i >= cur_size)
 			text = (char*) realloc(text, (cur_size*=2) *sizeof(char));	// doubles buffer size whenever nedded
 		text[i++] = c;
@@ -262,7 +270,7 @@ int openTask(long int id){
 	card* newC = newCard();
 
 	newC->column = DOING;
-	newC->author = writeText(fauthor, "author.txt", getAuthor());
+	newC->author = writeAuthor(getAuthor());
 	newC->due = getDueDate();
 
 	int err = updateInListing(id, newC);
@@ -278,6 +286,12 @@ char* getAuthor(){
 
 	printf("\nPlease enter the author for the task:\n");
 	return readInput('\n');
+}
+
+long int writeAuthor(char* newAuthor){
+					// write author to file and return (long int) position
+	
+	return 0;
 }
 
 time_t getDueDate(){
