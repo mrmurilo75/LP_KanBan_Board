@@ -153,18 +153,18 @@ cardNode* getCard(long int id){
 
 int updateInListing(long int id, card* newC){
 						// update an card from id, using non-negative values from newC
-
 	if(id < 0 || newC == NULL) return -1;
 
 	int err = 0;
 
-	cardNode* toUpdate = NULL;
+	CardList toUpdate = NULL;
 	CardList prevByAll;
 	for(CardList now = byAll, prev = NULL; now->value != NULL; prev = now, now = now->nextByAll){
 		if(now->value->id == id){
 			toUpdate = now;
 			prevByAll = prev;
-			prev->nextByAll = now->nextByAll;
+			if(prev != NULL)
+				prev->nextByAll = now->nextByAll;
 		}
 	}
 	if(newC->author >= 0){
