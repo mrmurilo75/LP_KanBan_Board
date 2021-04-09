@@ -329,7 +329,7 @@ long int writeAuthor(char* newAuthor){
 	while( c != EOF ){
 		long int pos = ftell(fauthor);
 		int i;
-		for(i=0; i < size && (c =fgetc(fauthor)) == newAuthor[i]; i++);
+		for(i=0; i < size && (c =fgetc(fauthor)) == newAuthor[i] && c != EOF; i++);
 		if(i == size)
 			return pos;
 		if(c != '\0')
@@ -453,7 +453,7 @@ int updateFCards(long int id, card* newC){
 		putError(-1);
 		return -1;
 	}
-	printCard(oldC);
+//	printCard(oldC);	//debug
 
 	return 0;
 
@@ -469,7 +469,10 @@ int closeTask(long int id){
 	card* newC = newCard();
 
 	newC->column = DONE;
-	if( time(&(newC->conclusion)) < 0 ) return err;
+	if( time(&(newC->conclusion)) < 0 ){
+		putError(err);
+		return err;
+	}
 
 	int err1 = updateInListing(id, newC);
 	if(err1){

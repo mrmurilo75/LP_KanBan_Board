@@ -168,31 +168,34 @@ int updateInListing(long int id, card* newC){
 			prevByAll = prev;
 			if(prev != NULL)
 				prev->nextByAll = now->nextByAll;
+			break;
 		}
 	}
 	if(newC->author >= 0){
 		toUpdate->value->author = newC->author;
 
 		for(CardList now = byAuthor, prev = NULL; now->value != NULL; prev = now, now = now->nextByAuthor){
-			if(now->value->id == id)
+			if(now->value->id == id){
 				prev->nextByAuthor = now->nextByAuthor;
+				err = putByAuthor(toUpdate, now, prev);
+				break;
+			}
 		}
-		err = putByAuthor(toUpdate, byAuthor, NULL);
 	}
+
 	if(newC->due >= 0)
 		toUpdate->value->due = newC->due;
 	if(newC->conclusion >= 0)
 		toUpdate->value->conclusion = newC->conclusion;
 	if(newC->priority >= 0)
 		toUpdate->value->priority = newC->priority;
-	if(newC->column >= 0){
-		if(toUpdate->value->column < newC->column){
-			toUpdate->value->column = newC->column;
-			err = ( putByAll(toUpdate, byAll, NULL) || err );
-		} else{
-			toUpdate->value->column = newC->column;
-			err = ( putByAll(toUpdate, toUpdate->nextByAll, prevByAll) || err );
-		}
+	if(newC->column >= 0)
+		toUpdate->value->column = newC->column;
+	if(toUpdate->value->column < newC->column){
+		err = ( putByAll(toUpdate, byAll, NULL) || err );
+	} else{
+		toUpdate->value->column = newC->column;
+		err = ( putByAll(toUpdate, toUpdate->nextByAll, prevByAll) || err );
 	}
 
 	return err;
