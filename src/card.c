@@ -46,4 +46,17 @@ card* updateCard(card* newC, card* oldC){
 	return oldC;
 }
 
+void printCard(card* cc){
+				// print card
+	printf("Id = \t%ld\n"
+		"Text pos =\t%ld\n"
+		"Author pos =\t%ld\n"
+		"Creation = \t%ld\n"
+		"Due = \t%ld\n"
+		"Concl. = \t%ld\n"
+		"Priority = \t%d\n"
+		"Column = \t%d\n"
+		, cc->id, cc->text, cc->author, cc->creation, cc->due, cc->conclusion, cc->priority, cc->column);
+}
+
 #endif 		// CARD_C_INCLUDED

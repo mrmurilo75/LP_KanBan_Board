@@ -32,7 +32,7 @@ int putInListing(card* next){
 	if( (err = putByCreation(input, byCreation, NULL)) )
 		return err;
 
-	return err;
+	return 0;
 }
 
 int putByAll(cardNode* input, cardNode* now, cardNode* prev){
@@ -153,7 +153,10 @@ cardNode* getCard(long int id){
 
 int updateInListing(long int id, card* newC){
 						// update an card from id, using non-negative values from newC
-	if(id < 0 || newC == NULL) return -1;
+	if(id < 0)
+		return -2;
+	if(newC == NULL)
+		return -3;
 
 	int err = 0;
 

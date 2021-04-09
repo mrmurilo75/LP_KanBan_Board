@@ -103,17 +103,22 @@ int get_option(void){
 int putTask(card *reference){
 			// get card reference and put write it to memory and files
 
-	int err = putInListing(reference);
-	if(!err) 
-		err = writeCard(reference);
+	int err = -1;
+	int err1 = putInListing(reference);
+	if(!err1) 
+		err1 = writeCard(reference);
 
-	if(!err) 
+	if(!err1) 
 		printf("Card added successfully.\n");
 	else
 		printf("We're sorry, but there was an error !\n");
 	printf("Returning to menu...\n\n");
 
-	return err;
+	if(err1){
+		putError(err);
+		return err;
+	}
+	return 0;
 
 }
 
@@ -248,7 +253,7 @@ long int getCardId(){
 	if(cur >=0 && cur < maxValue)		// maxValue is supposed to be '\0'
 		return cur;
 
-	printf("Invalid input ! Return to menu...");
+	printf("Invalid input ! Return to menu...\n\n");
 	return -1;
 }
 
@@ -266,29 +271,37 @@ long int fgetSize(FILE *file){
 int openTask(long int id){
 				// move task from TODO to DOING
 				// get and set author, get and set due date
+	int err = -2;
 	if(id <0)
-		return -1;
+		return err;
 	card* newC = newCard();
 
 	newC->column = DOING;
 
 	long int author;
 	if( (author = writeAuthor(getAuthor())) < 0)
-		return -1;
+		return err;
 	newC->author = author;
 
 	time_t due;
 	if( (due = getDueDate()) < 0 )
-		return -1;
+		return err;
 	newC->due = due;
 
-		printf("\n\tentering...\n");		//debug
-	int err = updateInListing(id, newC);
-	if(err) return err;
+	int err1 = updateInListing(id, newC);
+	if(err1){
+		putError(err);
+		return err;
+	}
 
-	err = updateFCards(id, newC);
+	err1 = updateFCards(id, newC);
+	if(err1){
+		err = err*10 - err1;
+		putError(err);
+		return err;
+	}
 
-	return err;
+	return 0;
 }
 
 char* getAuthor(){
@@ -421,65 +434,110 @@ struct tm* makeStructTM(int year, int month, int day){
 
 int updateFCards(long int id, card* newC){
 						// update file fcards.bin with update card information
+	if(id < 0 || newC == NULL)
+		return -1;
+
 	int err = fseek(fcards, id, SEEK_SET);
 	if(err) return -1;
 
 	card *oldC = freadCard(fcards);
+	printCard(oldC);
 
 	newC = updateCard(newC, oldC);
 
 	err = fseek(fcards, id, SEEK_SET);
-	if(err) return -1;
-	err = fwrite(newC, sizeof(card), 1, fcards);
+	if(err){
+		putError(-1);
+		return -1;
+	}
+	if(fwrite(newC, sizeof(card), 1, fcards) != 1){
+		putError(-1);
+		return -1;
+	}
 
-	return err;
+	return 0;
 
 }
 
 int closeTask(long int id){
 				// move task from DOING to DONE
 				// set conclusion date with time.h
+	int err = -4;
+	if(id < 0)
+		return err;
+
 	card* newC = newCard();
 
 	newC->column = DONE;
-	if( time(&(newC->conclusion)) < 0 ) return -1;
+	if( time(&(newC->conclusion)) < 0 ) return err;
 
-	int err = updateInListing(id, newC);
-	if(err) return err;
+	int err1 = updateInListing(id, newC);
+	if(err1){
+		putError(err);
+		return err;
+	}
 
-	err = updateFCards(id, newC);
+	err1 = updateFCards(id, newC);
+	if(err1){
+		putError(err);
+		return err;
+	}
 
-	return err;
+	return 0;
 }
 
 int reopenTask(long int id){
 				// move task from DONE to TODO
 				// get and reset priority
+	int err = -5;
+	if(id < 0)
+		return err;
+
 	card* newC = newCard();
 
 	newC->column = TODO;
-	if( ( newC->priority = getPriority() ) < 0) return -1;
+	if( ( newC->priority = getPriority() ) < 0) return err;
 
-	int err = updateInListing(id, newC);
-	if(err) return err;
+	int err1 = updateInListing(id, newC);
+	if(err1){
+		putError(err);
+		return err;
+	}
 
-	err = updateFCards(id, newC);
+	err1 = updateFCards(id, newC);
+	if(err1){
+		putError(err);
+		return err;
+	}
 
-	return err;
+	return 0;
 }
 
 int changeAuthor(long int id){
 				// change Author in card given by id
+	int err = -3;
+	if(id < 0)
+		return err;
+
 	card* newC = newCard();
 
-	newC->author = writeAuthor(getAuthor());
+	long int author;
+	if( (author = writeAuthor(getAuthor())) >= 0)
+		newC->author = author;
 
-	int err = updateInListing(id, newC);
-	if(err) return err;
+	int err1 = updateInListing(id, newC);
+	if(err1){
+		putError(err);
+		return err;
+	}
 
-	err = updateFCards(id, newC);
+	err1 = updateFCards(id, newC);
+	if(err1){
+		putError(err);
+		return err;
+	}
 
-	return err;
+	return 0;
 }
 
 int view(byte by){
@@ -566,7 +624,7 @@ int viewByCreation(){
 void putError(int err){
 			// print error message to stderr
 
-	fprintf(stderr, "There was an error");
+	fprintf(stderr, "There was an error coded %d\n", err);
 	exit(0);
 }
 

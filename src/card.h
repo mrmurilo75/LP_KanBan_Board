@@ -41,4 +41,7 @@ card* freadCard(FILE* stream);			// malloc space for a card and fill from stream
 card* updateCard(card* newC, card* oldC);	// update any non-negative fields in newC to oldC
 //DONE
 
+void printCard(card* cc);
+				// print card
+
 #endif	//CARD_H_INCLUDED

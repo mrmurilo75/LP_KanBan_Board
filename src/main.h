@@ -50,10 +50,10 @@ int writeCard(card* reference);		// write card to file and return error or 0
 //DONE
 
 int putTask(card *reference);		// get card reference and put it in memory
-//DONE
+//DONE			// err = -1;
 
 int openTask(long int id);		// move task from TODO to DOING
-//DONE					// get and set author, get and set due date
+//DONE			// err = -2;	// get and set author, get and set due date
 //
 	char* getAuthor(void);
 	//DONE				// reads author from stdin
@@ -75,14 +75,14 @@ int openTask(long int id);		// move task from TODO to DOING
 	//DONE				// update file fcards.bin with update card information
 //
 
+int changeAuthor(long int id);		// change Author in card given by id
+//DONE			// err = -3;
+
 int closeTask(long int id);		// move task from DOING to DONE
-//DONE					// set conclusion date with time.h
+//DONE			// err = -4;	// set conclusion date with time.h
 
 int reopenTask(long int id);		// move task from DONE to TODO
-//DONE					// get and reset priority
-
-int changeAuthor(long int id);		// change Author in card given by id
-//DONE
+//DONE			// err = -5;	// get and reset priority
 
 int viewByAll(void);			// view from the organized linked list (
 					//					TODO by priority then creation,
@@ -94,6 +94,7 @@ int viewByCreation(void);		// view all by creation date
 int viewByAuthor(void);			// view all by Author (only DOING and DONE)
 
 int view(byte by);			// iterates through CardList's and print card in the order passed as 'by'
+//DONE
 
 void putError(int err);			// print error message to stderr
 // NOT DONE (temporarily defined)
