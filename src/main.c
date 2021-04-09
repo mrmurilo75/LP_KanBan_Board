@@ -297,6 +297,7 @@ long int writeAuthor(char* newAuthor){
 			fauthor = fopen("author.txt", "w+");
 			return writeText(fauthor, "author.txt", newAuthor);
 	}
+//		printf("\n\tentering...\n");		//debug
 
 	fseek(fauthor, 0, SEEK_SET);
 	int size = strlen(newAuthor) +1;
@@ -308,8 +309,9 @@ long int writeAuthor(char* newAuthor){
 		if(i == size)
 			return pos;
 		if(c != '\0')
-			while(fgetc(fauthor) != '\0');
+			while( (c=fgetc(fauthor)) != '\0' && c != EOF);
 	}
+//		printf("\n\treturning...\n");		//debugin
 
 	return writeText(fauthor, "author.txt", newAuthor);
 }
@@ -321,35 +323,29 @@ time_t getDueDate(){
 		printf("Please enter a due date:\n"
 			"(in the YYYY MM DD format)\n");
 
-		char date[9];
+		char date[8];
 		char c;
 		for(int i=0; i<8; i++){
 			while( !isdigit( (c =getchar()) ) );	// read any non-digits bf input
-			date[i]=c;
+			date[i] = c-'0';
 		}
-		date[8] = '\0';
-
 		while( getchar() !='\n');	// read any non-digits after input
-		printf("Confirm date %c%c%c%c %c%c %c%c ? (y/n) ", date[0], date[1], date[2], date[3], date[4], date[5], date[6], date[7]);
+
+		int year = date[0]*1000 + date[1]*100 + date[2]*10 + date[3], 
+		    month = date[4]*10 + date[5], 
+		    day = date[6]*10 + date[7];
+
+		printf("Confirm date %d %02d %02d ? (y/n) ", year, month, day);
 
 		c =getchar();
-		printf("\n\t%c",c);
 		while( getchar() != '\n');
 		if(c!='y' && c!='Y'){
 			printf("Try again (put all zeros to cancel [0000 00 00] )\n");
 			continue;
 		}
-		
-		int dateValue = atoi(date);
-		
-		if(dateValue == 0)
+
+		if(year+month+day == 0)
 			return -1;
-
-		int day = dateValue%100, month = dateValue/100%10000, year = dateValue/10000;
-		
-		if(isBissext(year) && month == 2 && day == 29)
-			return mktime( makeStructTM(year, month, day) );
-
 		if(year < 1900){
 			printf("Invalid year ! Try again (put all zeros to cancel [0000 00 00] )\n");
 			continue;
@@ -358,6 +354,9 @@ time_t getDueDate(){
 			printf("Invalid month ! Try again (put all zeros to cancel [0000 00 00] )\n");
 			continue;
 		}
+
+		if(isBissext(year) && month == 2 && day == 29)
+			return mktime( makeStructTM(year, month, day) );
 
 		int last = 30;
 		switch(month){
