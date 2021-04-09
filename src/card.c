@@ -25,6 +25,9 @@ card* freadCard(FILE * stream){
 
 card* updateCard(card* newC, card* oldC){
 
+	if(newC == NULL || oldC == NULL)
+		return NULL;
+
 	if(newC->text >= 0)
 		oldC->text = newC->text;
 	if(newC->author >= 0)
