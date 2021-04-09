@@ -74,7 +74,7 @@ int get_option(void){
 		printf(	"**************MENU**************\n"
 			"1 - Inserir tarefa em 'To Do'\n"
 			"2 - Mover cartão de 'To Do' para 'Doing'\n"
-//			"3 - Alterar pessoas responsável\n"
+			"3 - Alterar pessoas responsável\n"
 			"4 - Fechar tarefa\n"
 			"5 - Reabrir tarefa\n"
 			"6 - Visualizar o quadro\n"
@@ -441,7 +441,6 @@ int updateFCards(long int id, card* newC){
 	if(err) return -1;
 
 	card *oldC = freadCard(fcards);
-	printCard(oldC);
 
 	newC = updateCard(newC, oldC);
 
@@ -454,6 +453,7 @@ int updateFCards(long int id, card* newC){
 		putError(-1);
 		return -1;
 	}
+	printCard(oldC);
 
 	return 0;
 
@@ -562,13 +562,13 @@ int view(byte by){
 		printf("\nDescrição da tarefa: \n");
 		fseek(ftext,now->value->text, SEEK_SET);
 		char c;
-		while((c=fgetc(ftext)) != '\0') {
+		while((c=fgetc(ftext)) != '\0' && c != EOF) {
 			putchar(c);
 		}
 		if(now->value->column != TODO && now->value->author >= 0){
 			printf("\nAutor da tarefa: ");
 			fseek(fauthor, now->value->author, SEEK_SET);
-			while((c=fgetc(fauthor)) != '\0') {
+			while((c=fgetc(fauthor)) != '\0' && c != EOF) {
 				putchar(c);
 			}
 		}
