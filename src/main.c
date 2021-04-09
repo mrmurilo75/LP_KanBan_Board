@@ -50,7 +50,7 @@ int initialize(void){
 		// get .txt files from disk into memory and fill pointers
 	if(fcards == NULL) fcards = fopen("cards.bin", "r+b");
 	if(ftext == NULL) ftext = fopen("text.txt", "a+");
-	if(fauthor == NULL) fauthor = fopen("author.txt", "r");
+	if(fauthor == NULL) fauthor = fopen("author.txt", "a+");
 
 	createCleanLists();
 
@@ -288,10 +288,30 @@ char* getAuthor(){
 	return readInput('\n');
 }
 
+char** authors;
+
 long int writeAuthor(char* newAuthor){
-					// write author to file and return (long int) position
-	
-	return 0;
+					// if author is already in file return (long int) position
+					// else write at end of file
+	if(fauthor == NULL && (fauthor = fopen("author.txt", "r+")) == NULL){
+			fauthor = fopen("author.txt", "w+");
+			return writeText(fauthor, "author.txt", newAuthor);
+	}
+
+	fseek(fauthor, 0, SEEK_SET);
+	int size = strlen(newAuthor) +1;
+	char c = '\0';
+	while( c != EOF ){
+		long int pos = ftell(fauthor);
+		int i;
+		for(i=0; i < size && (c =fgetc(fauthor)) == newAuthor[i]; i++);
+		if(i == size)
+			return pos;
+		if(c != '\0')
+			while(fgetc(fauthor) != '\0');
+	}
+
+	return writeText(fauthor, "author.txt", newAuthor);
 }
 
 time_t getDueDate(){
@@ -443,7 +463,7 @@ int changeAuthor(long int id){
 				// change Author in card given by id
 	card* newC = newCard();
 
-	newC->author = writeText(fauthor, "author.txt", getAuthor());
+	newC->author = writeAuthor(getAuthor());
 
 	int err = updateInListing(id, newC);
 	if(err) return err;

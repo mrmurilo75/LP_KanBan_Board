@@ -59,7 +59,8 @@ int openTask(long int id);		// move task from TODO to DOING
 	//DONE				// reads author from stdin
 
 	long int writeAuthor(char* newAuthor);
-	//DONE				// write author to file and return (long int) position
+	//DONE				// if author is already in file return (long int) position
+					// else write at end of file
 
 	time_t getDueDate();
 	//DONE				// get due date from stdin
