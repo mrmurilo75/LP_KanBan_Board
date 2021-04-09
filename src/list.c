@@ -168,6 +168,8 @@ int updateInListing(long int id, card* newC){
 			prevByAll = prev;
 			if(prev != NULL)
 				prev->nextByAll = now->nextByAll;
+			else
+				byAll = now->nextByAll;
 			break;
 		}
 	}
@@ -192,6 +194,7 @@ int updateInListing(long int id, card* newC){
 	if(newC->column >= 0)
 		toUpdate->value->column = newC->column;
 	if(toUpdate->value->column < newC->column){
+		toUpdate->value->column = newC->column;
 		err = ( putByAll(toUpdate, byAll, NULL) || err );
 	} else{
 		toUpdate->value->column = newC->column;
