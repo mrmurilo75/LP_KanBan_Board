@@ -245,7 +245,7 @@ long int getCardId(){
 		"(an invalid value returns to main menu)\n");
 	long int maxValue = fgetSize(fcards);
 	int cur = getPositiveDecimal();
-	if(cur < maxValue)		// maxValue is supposed to be '\0'
+	if(cur >=0 && cur < maxValue)		// maxValue is supposed to be '\0'
 		return cur;
 
 	printf("Invalid input ! Return to menu...");
@@ -266,13 +266,23 @@ long int fgetSize(FILE *file){
 int openTask(long int id){
 				// move task from TODO to DOING
 				// get and set author, get and set due date
-
+	if(id <0)
+		return -1;
 	card* newC = newCard();
 
 	newC->column = DOING;
-	newC->author = writeAuthor(getAuthor());
-	newC->due = getDueDate();
 
+	long int author;
+	if( (author = writeAuthor(getAuthor())) < 0)
+		return -1;
+	newC->author = author;
+
+	time_t due;
+	if( (due = getDueDate()) < 0 )
+		return -1;
+	newC->due = due;
+
+		printf("\n\tentering...\n");		//debug
 	int err = updateInListing(id, newC);
 	if(err) return err;
 
@@ -293,11 +303,12 @@ char** authors;
 long int writeAuthor(char* newAuthor){
 					// if author is already in file return (long int) position
 					// else write at end of file
+	if(newAuthor == NULL)
+		return -1;
 	if(fauthor == NULL && (fauthor = fopen("author.txt", "r+")) == NULL){
 			fauthor = fopen("author.txt", "w+");
 			return writeText(fauthor, "author.txt", newAuthor);
 	}
-//		printf("\n\tentering...\n");		//debug
 
 	fseek(fauthor, 0, SEEK_SET);
 	int size = strlen(newAuthor) +1;
@@ -311,7 +322,6 @@ long int writeAuthor(char* newAuthor){
 		if(c != '\0')
 			while( (c=fgetc(fauthor)) != '\0' && c != EOF);
 	}
-//		printf("\n\treturning...\n");		//debugin
 
 	return writeText(fauthor, "author.txt", newAuthor);
 }
@@ -335,7 +345,7 @@ time_t getDueDate(){
 		    month = date[4]*10 + date[5], 
 		    day = date[6]*10 + date[7];
 
-		printf("Confirm date %d %02d %02d ? (y/n) ", year, month, day);
+		printf("Confirm date %04d %02d %02d ? (y/n) ", year, month, day);
 
 		c =getchar();
 		while( getchar() != '\n');
